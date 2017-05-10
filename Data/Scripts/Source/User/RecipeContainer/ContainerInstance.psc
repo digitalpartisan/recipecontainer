@@ -8,8 +8,8 @@ RecipeContainer:Logic Property ContainerType Auto Const Mandatory
 {What sort of container this is.  See the RecipeContainer:Logic script for details.}
 Bool Property PowerRequired = true Auto Const
 {Setting this value to false will cause the container to cool regardless of whether or not it has power.  This is most appropriate for containers placed in a cell which is not part of a workshop.}
-Int Property TimerID = 1 Auto Const
-{Used for tracking the timer events on this script.}
+Int Property ProcessingTimerID = 1 Auto Const
+{Used for tracking the process cycles on this script.}
 
 String sStateWaiting = "Waiting" Const
 String sStateProcessing = "Processing" Const
@@ -27,17 +27,17 @@ EndFunction
 
 Function cancelThisCycle()
 {Used in situations where the current cycle needs to stop for whatever reason, such as a loss of power event.}
-	CancelTimerGameTime(TimerID)
-EndFunction
-
-Function requestNextCycle()
-{Used when some processing event is done and the container this script is attached to needs to queue for another timer event so that the next processing event can occur.  Leaving this empty in the global state is appropriate since nothing will happen unless this is overriden in a particular state.}
-
+	CancelTimerGameTime(ProcessingTimerID)
 EndFunction
 
 Function restartCycle()
 {Another handy routine for processing things like object creation or a power state change.}
 	cancelThisCycle()
+	requestNextCycle()
+EndFunction
+
+Function process()
+	ContainerType.processContainer(self)
 	requestNextCycle()
 EndFunction
 
@@ -56,6 +56,7 @@ Function examineState()
 EndFunction
 
 Event OnInit()
+	RecipeContainer:Logger.logInit(self)
 	AddInventoryEventFilter(None)
 	examineState()
 EndEvent
@@ -79,8 +80,15 @@ EndEvent
 
 Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemReference, ObjectReference akSourceContainer)
 {This entire script is designed to prevent requesting timer events and running through a container's contents against the container type's recipe list unless there's somethign to process.  When something is added to the container, reconsider whether or not processing is appropriate.}
-	examineState()
+	if (Game.GetPlayer() == akSourceContainer) ; if this check is not made, the replacement substitutions on this container will trigger the state check which will happen regardless when the substitution process is over, so don't do it
+		examineState()
+	endif
 EndEvent
+
+Function requestNextCycle()
+{Required to be defined here so that it exists as empty in every state unless specifically defined therein.}
+
+EndFunction
 
 Auto State Waiting
 	Event OnBeginState(String sPreviousState)
@@ -97,17 +105,16 @@ State Processing
 	Function requestNextCycle()
 	{When the container is anticipates the need to process contents, verify that doing so is appropriate at this time and if so, request a timer event for the next processing round.}
 		if (ContainerType.instanceNeedsProcessing(self))
-			StartTimerGameTime(ContainerType.CycleHours, TimerID)
+			StartTimerGameTime(ContainerType.CycleHours, ProcessingTimerID)
 		else
-			GoToState("Waiting")
+			GoToState(sStateWaiting)
 		endif
 	EndFunction
 	
 	Event OnTimerGameTime(Int aiTimerID)
 	{Event observer for timer updates from the game engine.  See requestNextCycle() and cancelThisCycle().  Note that this behavior only occurs in this state, so that timer events received in another state will just go away.  This is the desired behavior.}
-		if (aiTimerID == TimerID)
-			ContainerType.processContainer(self)
-			requestNextCycle()
+		if (ProcessingTimerID == aiTimerID)
+			process()
 		endif
 	EndEvent
 EndState

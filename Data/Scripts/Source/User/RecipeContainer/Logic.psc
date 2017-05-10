@@ -14,7 +14,7 @@ Bool Function validateRecipe(DialogueDrinkingBuddyScript:BrewingRecipe recipeDat
 	return (None != recipeData.WarmDrinkVariant && None != recipeData.ColdDrinkVariant)
 EndFunction
 
-Bool Function instanceNeedsProcessing(RecipeContainer:ContainerInstance akContainer, DialogueDrinkingBuddyScript: BrewingRecipe[] recipes = None)
+Bool Function instanceNeedsProcessing(RecipeContainer:ContainerInstance akContainerRef, DialogueDrinkingBuddyScript:BrewingRecipe[] recipes = None)
 	if (None == recipes)
 		recipes = CustomRecipes
 	endif
@@ -23,12 +23,12 @@ Bool Function instanceNeedsProcessing(RecipeContainer:ContainerInstance akContai
 		return false
 	endif
 	
-	if (0 == akContainer.GetItemCount())
+	if (0 == akContainerRef.GetItemCount())
 		return false
 	endif
 	
 	Int iCounter = 0
-	Bool bCooling = akContainer.isCooling()
+	Bool bCooling = akContainerRef.isCooling()
 	Form fCheckFor = None
 	while (iCounter < recipes.Length)
 		if (bCooling)
@@ -36,7 +36,7 @@ Bool Function instanceNeedsProcessing(RecipeContainer:ContainerInstance akContai
 		else
 			fCheckFor = recipes[iCounter].ColdDrinkVariant
 		endif
-		if (0 < akContainer.GetItemCount(fCheckFor))
+		if (0 < akContainerRef.GetItemCount(fCheckFor))
 			return true
 		endif
 		
@@ -81,7 +81,7 @@ Function processRecipeList(RecipeContainer:ContainerInstance akContainer, Dialog
 EndFunction
 
 Function processContainer(RecipeContainer:ContainerInstance akContainer)
-	MEBO:Logger:RecipeContainer.logCycle(akContainer)
+	RecipeContainer:Logger.logCycle(akContainer)
 	processRecipeList(akContainer, CustomRecipes)
 EndFunction
 
