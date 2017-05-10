@@ -16,8 +16,8 @@ Bool Function error(String sMessage) Global
 	return Loggout.error(getName(), sMessage)
 EndFunction
 
-Bool Function logCycle(RecipeContainer:ContainerInstance akContainerRef, Bool bCooling = false) Global
-	return log(akContainerRef + " processing, cooling: " + bCooling)
+Bool Function logCycle(RecipeContainer:ContainerInstance akContainerRef) Global
+	return log(akContainerRef + " processing, cooling: " + akContainerRef.isCooling())
 EndFunction
 
 Bool Function logReplacement(RecipeContainer:ContainerInstance akContainerRef, Potion apSearch, Potion apReplace, Int iCount) Global
@@ -38,4 +38,8 @@ EndFunction
 
 Bool Function logPowerEvent(RecipeContainer:ContainerInstance akContainerRef) Global
 	return log(akContainerRef + " has power: " + akContainerRef.IsPowered())
+EndFunction
+
+Bool Function logInit(RecipeContainer:ContainerInstance akContainerRef) Global
+	return log(akContainerRef + " has initialized")
 EndFunction
