@@ -12,11 +12,13 @@ This file is a mod author resource.  Do not download it unless a mod author has 
 
 -
 
+In General:
+
 Recipe Container's general behavior is to enable a time-delayed replacement of one consumable record with another consumable record inside a container which it manages.  The most obvious application of Recipe Container is that of a functional refrigerator such as one could possibly acquire in the form of Drinking Buddy.  For this reason,  “Fridge” container logic has been included in Recipe Container.  The recipes are in the Drinking Buddy recipe format because this allows the use of all those existing recipes – even those provided by DLC – without having to redefine the data.
 
 Recipe Container is easy to use.  A demonstration mod called “Working Fridges” has been released in conjunction with Recipe Container.  Working Fridges is a very simple mod which demonstrates how to incorporate Recipe Container in both workshop and non-workshop objects.  In general, to enable Recipe Container behavior on an object is to attach the RecipeContainer:ContainerInstance script to it in the editor and populate that script's properties.  In turn, one of those properties requires a dummy quest which has a RecipeContainer:ContainerLogic script attached to it.  The property values on the dummy quest include custom recipes that only containers using that logic can use to process their contents and how long that container logic set will take to perform the recipe swap outs.
 
-Recipe Container has some unique features that require explanation.  
+Features & Their Explanation:  
 
 Firstly, each container needs to be associated with a container type object (which, again, is a dummy quest with a RecipeContainer:ContainerLogic script attached) because this centralizes all the recipes for a particular container type. Container types are also responsible for dictating how many in-game hours containers of that type take to convert the “warm” consumable to its “cold” variant and back.  A particular container can optionally require power to cool its contents.  If a container requires power to cool, loss of power will result in warming contents.
 
@@ -24,4 +26,10 @@ Secondly, Recipe Container has been designed to correctly use the game's timer e
 
 Thirdly, Recipe Container container types allow for the creation of recipes which do not currently exist in the game and a mod author using Recipe Container can create multiple container types to use in their mod.  Obviously, refrigeration functionality using Drinking Buddy recipes is included in Recipe Container, but that doesn't mean it is only for fridges.  A mod author could create a chem cooler that somehow enriches chems to provide more beneficial version of those same chems or a salt locker than seasons cooked meats to provide extra buffs.  Do note that the “cooled” version of a consumable record will likely need to be created by the mod author to pair with the existing record.
 
-Do not be afraid to convert an existing mod to make use of Recipe Container.  During the development of Working Fridges, a plain fridge container was placed via the workshop, a save was made, and that container record was updated by attaching the RecipeContainer:ContainerInstance script and populating its properties.  The save was loaded and the existing container initialized and worked as expected.  This behavior was verified with log files to ensure this upgrade recommendation could be made with confidence.  Do note that if the container is configured to require power when it previously did not, it will not cool correctly until it is powered in workshop mode.  For this reason, it is best to unset the power requirement on your workshop containers being converted to use Recipe Container.
+On Upgrading an Existing Mod & Existing Containers:
+
+Do not be afraid to convert an existing mod to make use of Recipe Container. During the development of Working Fridges, a plain fridge container was placed via the workshop, a save was made, and that container record was updated by attaching the RecipeContainer:ContainerInstance script and populating its properties.  The save was loaded and the existing container initialized and worked as expected. This behavior was verified with log files to ensure this upgrade recommendation could be made with confidence.  Do note that if the container is configured to require power when it previously did not, it will not cool correctly until it is powered in workshop mode.  For this reason, it is best to unset the power requirement on your workshop containers being converted to use Recipe Container.
+
+Cautions:
+
+Through extensive modding work and even verification via log file, a contents that spawn in a container (such as by way of a leveled list) are not accessible via Papyrus until something is added to that container.  This is somewhat disappointing since a player home mod might well make use of a fridge with Nuka-Cola in it from the word “go.”  At worst, this means the container will need to have things added to it and then have the examineState() function called on it if a mod author wishes a container to be filled and processed when the player finds it.
