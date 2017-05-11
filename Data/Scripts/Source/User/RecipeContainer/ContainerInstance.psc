@@ -78,21 +78,18 @@ Event OnPowerOff()
 	examineState()
 EndEvent
 
-Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemReference, ObjectReference akSourceContainer)
-{This entire script is designed to prevent requesting timer events and running through a container's contents against the container type's recipe list unless there's somethign to process.  When something is added to the container, reconsider whether or not processing is appropriate.}
-	if (Game.GetPlayer() == akSourceContainer) ; if this check is not made, the replacement substitutions on this container will trigger the state check which will happen regardless when the substitution process is over, so don't do it
-		examineState()
-	endif
-EndEvent
-
 Function requestNextCycle()
 {Required to be defined here so that it exists as empty in every state unless specifically defined therein.}
-
 EndFunction
 
 Auto State Waiting
 	Event OnBeginState(String sPreviousState)
 		RecipeContainer:Logger.logState(self, sStateWaiting)
+	EndEvent
+	
+	Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemReference, ObjectReference akSourceContainer)
+	{This entire script is designed to prevent requesting timer events and running through a container's contents against the container type's recipe list unless there's somethign to process.  When something is added to the container, reconsider whether or not processing is appropriate, but only if a processing cycle is not already in effect.}
+		examineState() ; doing this only in a waiting state means that the item replacements made during processing will not trigger another examineState() call since it will be called at the end of processing
 	EndEvent
 EndState
 
