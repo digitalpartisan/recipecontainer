@@ -10,6 +10,8 @@ If you are interested in using Recipe Container in one of your mods, the develop
 
 This file is a mod author resource.  Do not download it unless a mod author has told you to do so.  They should only give that instruction if they either did not bundle Recipe Container with their mod (which is the intended use of this library) or if their mod contains a bugged version of Recipe Container and it has not yet been updated to include the fixed version.
 
+Recipe Container makes use of Loggout for debugging.
+
 -
 
 In General:
