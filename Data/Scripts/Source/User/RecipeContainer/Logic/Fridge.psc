@@ -1,9 +1,11 @@
 Scriptname RecipeContainer:Logic:Fridge extends RecipeContainer:Logic
 
+Import DialogueDrinkingBuddyScript
+
 DialogueDrinkingBuddyScript Property DialogueDrinkingBuddy Auto Const Mandatory
 {The Drinking Buddy diagloque quest which contains the possible cold / warm variants which this script uses to cycle between warm and cold fridge contents}
 
-Bool Function instanceNeedsProcessing(RecipeContainer:ContainerInstance akContainerRef, DialogueDrinkingBuddyScript: BrewingRecipe[] recipes = None)
+Bool Function instanceNeedsProcessing(RecipeContainer:ContainerInstance akContainerRef, BrewingRecipe[] recipes = None)
 {In addition to the base logic, this function needs to consider the Drinking Buddy list of recipes.}
 	return parent.instanceNeedsProcessing(akContainerRef) || parent.instanceNeedsProcessing(akContainerRef, DialogueDrinkingBuddy.BrewingRecipes)
 EndFunction
