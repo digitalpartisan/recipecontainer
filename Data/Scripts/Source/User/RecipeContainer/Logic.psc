@@ -106,3 +106,11 @@ EndFunction
 Function cleanData()
 	RecipeContainer:Utility.cleanContainerData(self)
 EndFunction
+
+Function appendContainerRecipes(RecipeContainer:Logic sourceContainer)
+	RecipeContainer:Utility.appendContainerRecipes(self, sourceContainer)
+EndFunction
+
+Function removeContainerRecipes(RecipeContainer:Logic sourceContainer)
+	RecipeContainer:Utility.removeContainerRecipes(self, sourceContainer)
+EndFunction

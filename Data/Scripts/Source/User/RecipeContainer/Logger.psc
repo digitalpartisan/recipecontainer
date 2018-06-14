@@ -1,5 +1,7 @@
 Scriptname RecipeContainer:Logger Hidden Const DebugOnly
 
+Import DialogueDrinkingBuddyScript
+
 String Function getName() Global
 	return "RecipeContainer"
 EndFunction
@@ -42,4 +44,24 @@ EndFunction
 
 Bool Function logInit(RecipeContainer:ContainerInstance akContainerRef) Global
 	return log(akContainerRef + " has initialized")
+EndFunction
+
+Bool Function logCleaning(RecipeContainer:Logic akContainerType) Global
+	return log(akContainerType + " is being cleaned")
+EndFunction
+
+Bool Function logAddingRecipes(RecipeContainer:Logic akContainerType, BrewingRecipe[] recipes) Global
+	return log(akContainerType + " is adding recipes: " + recipes)
+EndFunction
+
+Bool Function logRemovingRecipes(RecipeContainer:Logic akContainerType, BrewingRecipe[] recipes) Global
+	return log(akContainerType + " is removing recipes: " + recipes)
+EndFunction
+
+Bool Function logAppendContainerRecipes(RecipeContainer:Logic targetContainer, RecipeContainer:Logic sourceContainer) Global
+	return log(targetContainer + " is appending recipes from container " + sourceContainer)
+EndFunction
+
+Bool Function logRemoveContainerRecipes(RecipeContainer:Logic targetContainer, RecipeContainer:Logic sourceContainer) Global
+	return log(targetContainer + " is removing recipes from container " + sourceContainer)
 EndFunction
