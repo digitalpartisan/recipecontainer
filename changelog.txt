@@ -1,2 +1,5 @@
+v1.1.0
+Enhanced functionality for adding, replicating, and removing new recipes to and from container types
+
 v1.0.0
 Initial release

@@ -47,6 +47,7 @@ Function addRecipeToContainer(RecipeContainer:Logic targetContainer, BrewingReci
 EndFunction
 
 Function addRecipesToContainer(RecipeContainer:Logic targetContainer, BrewingRecipe[] newData) Global
+	RecipeContainer:Logger.logAddingRecipes(targetContainer, newData)
 	addRecipes(targetContainer.CustomRecipes, newData)
 EndFunction
 
@@ -70,7 +71,18 @@ Function removeRecipeFromContainer(RecipeContainer:Logic targetContainer, Brewin
 EndFunction
 
 Function removeRecipesFromContainer(RecipeContainer:Logic targetContainer, BrewingRecipe[] oldData) Global
+	RecipeContainer:Logger.logRemovingRecipes(targetContainer, oldData)
 	removeRecipes(targetContainer.CustomRecipes, oldData)
+EndFunction
+
+Function appendContainerRecipes(RecipeContainer:Logic targetContainer, RecipeContainer:Logic sourceContainer) Global
+	RecipeContainer:Logger.logAppendContainerRecipes(targetContainer, sourceContainer)
+	addRecipes(targetContainer.CustomRecipes, sourceContainer.customRecipes)
+EndFunction
+
+Function removeContainerRecipes(RecipeContainer:Logic targetContainer, RecipeContainer:Logic sourceContainer) Global
+	RecipeContainer:Logger.logRemoveContainerRecipes(targetContainer, sourceContainer)
+	removeRecipes(targetContainer.CustomRecipes, sourceContainer.customRecipes)
 EndFunction
 
 Function cleanDataSet(BrewingRecipe[] dataSet) Global
@@ -87,5 +99,6 @@ Function cleanDataSet(BrewingRecipe[] dataSet) Global
 EndFunction
 
 Function cleanContainerData(RecipeContainer:Logic targetContainer) Global
+	RecipeContainer:Logger.logCleaning(targetContainer)
 	cleanDataSet(targetContainer.CustomRecipes)
 EndFunction
