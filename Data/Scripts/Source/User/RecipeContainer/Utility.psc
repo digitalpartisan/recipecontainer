@@ -100,5 +100,7 @@ EndFunction
 
 Function cleanContainerData(RecipeContainer:Logic targetContainer) Global
 	RecipeContainer:Logger.logCleaning(targetContainer)
+	RecipeContainer:Logger.logContainerRecipes(targetContainer)
 	cleanDataSet(targetContainer.CustomRecipes)
+	RecipeContainer:Logger.logContainerRecipes(targetContainer)
 EndFunction
