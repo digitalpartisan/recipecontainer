@@ -1,6 +1,7 @@
 [
-	"Data\\SCRIPTS\\RecipeContainer\\Logic\\Fridge.pex",
-	"Data\\SCRIPTS\\RecipeContainer\\ContainerInstance.pex",
+	"Data\\Scripts\\RecipeContainer\\ContainerInstance.pex",
 	"Data\\Scripts\\RecipeContainer\\Logger.pex",
-	"Data\\SCRIPTS\\recipecontainer\\logic.pex"
+	"Data\\Scripts\\RecipeContainer\\Logic\\Fridge.pex",
+	"Data\\Scripts\\RecipeContainer\\Logic.pex",
+	"Data\\Scripts\\RecipeContainer\\Utility.pex"
 ]
