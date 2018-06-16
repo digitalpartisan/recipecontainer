@@ -65,3 +65,7 @@ EndFunction
 Bool Function logRemoveContainerRecipes(RecipeContainer:Logic targetContainer, RecipeContainer:Logic sourceContainer) Global
 	return log(targetContainer + " is removing recipes from container " + sourceContainer)
 EndFunction
+
+Bool Function logContainerRecipes(RecipeContainer:Logic targetContainer) Global
+	return log(targetContainer + " has recipes: " + targetContainer.CustomRecipes)
+EndFunction
