@@ -38,6 +38,7 @@ Bool Function instanceNeedsProcessing(RecipeContainer:ContainerInstance akContai
 		else
 			fCheckFor = recipes[iCounter].ColdDrinkVariant
 		endif
+		
 		if (0 < akContainerRef.GetItemCount(fCheckFor))
 			return true
 		endif
