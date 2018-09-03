@@ -11,6 +11,39 @@ BrewingRecipe Function createRecipe(Potion apWarmVariant, Potion apColdVariant) 
 	return newRecipe
 EndFunction
 
+Bool Function isInstanceUnprocessed(RecipeContainer:ContainerInstance instanceRef, BrewingRecipe[] recipes) Global
+	if (None == recipes)
+		return false
+	endif
+	
+	if (0 == recipes.Length)
+		return false
+	endif
+	
+	if (0 == instanceRef.GetItemCount())
+		return false
+	endif
+	
+	Int iCounter = 0
+	Bool bCooling = instanceRef.isCooling()
+	Form fCheckFor = None
+	while (iCounter < recipes.Length)
+		if (bCooling)
+			fCheckFor = recipes[iCounter].WarmDrinkVariant
+		else
+			fCheckFor = recipes[iCounter].ColdDrinkVariant
+		endif
+		
+		if (0 < instanceRef.GetItemCount(fCheckFor))
+			return true
+		endif
+		
+		iCounter += 1
+	endwhile
+	
+	return false
+EndFunction
+
 Int Function findRecipe(BrewingRecipe[] dataSet, BrewingRecipe targetRecipe) Global
 	return dataSet.Find(targetRecipe)
 EndFunction
