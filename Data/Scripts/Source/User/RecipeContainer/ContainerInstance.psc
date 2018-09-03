@@ -37,7 +37,7 @@ Function restartCycle()
 EndFunction
 
 Function process()
-	ContainerType.processContainer(self)
+	ContainerType.processInstance(self)
 	requestNextCycle()
 EndFunction
 

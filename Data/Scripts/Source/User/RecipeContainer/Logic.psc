@@ -6,50 +6,33 @@ This functionality is here and not handled by the container instance script beca
 
 Import DialogueDrinkingBuddyScript
 
-Float Property CycleHours Auto Const Mandatory
+Float Property CycleHours = 3.0 Auto Const
 {The number of in-game hours required to either cool drinks or cause them to become warm}
 BrewingRecipe[] Property CustomRecipes Auto
 {The recipes specific to this type of container will use to process contents.}
+RecipeContainer:RemoteContainer Property RemoteContainer Auto
 
 Bool Function validateRecipe(BrewingRecipe recipeData)
 {The base game did something like this in ths Buddy dialogue logic, so it's probably best to do it here, too.}
 	return (None != recipeData.WarmDrinkVariant && None != recipeData.ColdDrinkVariant)
 EndFunction
 
-Bool Function instanceNeedsProcessing(RecipeContainer:ContainerInstance akContainerRef, BrewingRecipe[] recipes = None)
-	if (None == recipes)
-		recipes = CustomRecipes
+Bool Function instanceNeedsProcessing(RecipeContainer:ContainerInstance akContainerRef)
+	if (RecipeContainer:Utility.isInstanceUnprocessed(akContainerRef, CustomRecipes))
+		return true
 	endif
 	
-	if (0 == recipes.Length)
-		return false
-	endif
-	
-	if (0 == akContainerRef.GetItemCount())
-		return false
-	endif
-	
-	Int iCounter = 0
-	Bool bCooling = akContainerRef.isCooling()
-	Form fCheckFor = None
-	while (iCounter < recipes.Length)
-		if (bCooling)
-			fCheckFor = recipes[iCounter].WarmDrinkVariant
-		else
-			fCheckFor = recipes[iCounter].ColdDrinkVariant
+	if (RemoteContainer)
+		RecipeContainer:Logic remoteLogic = RemoteContainer.lookup()
+		if (remoteLogic)
+			return remoteLogic.instanceNeedsProcessing(akContainerRef)
 		endif
-		
-		if (0 < akContainerRef.GetItemCount(fCheckFor))
-			return true
-		endif
-		
-		iCounter += 1
-	endwhile
+	endif
 	
 	return false
 EndFunction
 
-Function processRecipe(RecipeContainer:ContainerInstance akContainer, BrewingRecipe recipeData, Bool bCooling)
+Function processRecipe(RecipeContainer:ContainerInstance akContainerRef, BrewingRecipe recipeData, Bool bCooling)
 {Acts on the contents of the given container instance using the specified recipe to either warm or cool said contents.
 Warming or cooling will take the appropriate warm or cool item from the recipe and replace it with it's cool or warm variant in the container passed to this function.}
 	if (!validateRecipe(recipeData))
@@ -63,29 +46,36 @@ Warming or cooling will take the appropriate warm or cool item from the recipe a
 		pReplace = recipeData.ColdDrinkVariant
 	endif
 
-	Int iCount = akContainer.GetItemCount(pSearch)
+	Int iCount = akContainerRef.GetItemCount(pSearch)
 	if (0 == iCount)
 		return
 	endif
 
-	RecipeContainer:Logger.logReplacement(akContainer, pSearch, pReplace, iCount)
-	akContainer.RemoveItem(pSearch, iCount, true)
-	akContainer.AddItem(pReplace, iCount, true)
+	RecipeContainer:Logger.logReplacement(akContainerRef, pSearch, pReplace, iCount)
+	akContainerRef.RemoveItem(pSearch, iCount, true)
+	akContainerRef.AddItem(pReplace, iCount, true)
 EndFunction
 
-Function processRecipeList(RecipeContainer:ContainerInstance akContainer, BrewingRecipe[] recipes)
+Function processRecipeList(RecipeContainer:ContainerInstance akContainerRef, BrewingRecipe[] recipes)
 {Makes use of processRecipe() on an array of recipe objects against the contents of the container instance passed in.}
 	Int iCounter = 0
-	Bool bCooling = akContainer.isCooling() ; prevents unnecessary work by calling this function once per processing cycle
+	Bool bCooling = akContainerRef.isCooling() ; prevents unnecessary work by calling this function once per processing cycle
 	While (iCounter < recipes.Length)
-		processRecipe(akContainer, recipes[iCounter], bCooling)
+		processRecipe(akContainerRef, recipes[iCounter], bCooling)
 		iCounter += 1
 	EndWhile
 EndFunction
 
-Function processContainer(RecipeContainer:ContainerInstance akContainer)
-	RecipeContainer:Logger.logCycle(akContainer)
-	processRecipeList(akContainer, CustomRecipes)
+Function processInstance(RecipeContainer:ContainerInstance akContainerRef)
+	RecipeContainer:Logger.logCycle(akContainerRef)
+	processRecipeList(akContainerRef, CustomRecipes)
+	
+	if (RemoteContainer)
+		RecipeContainer:Logic remoteLogic = RemoteContainer.lookup()
+		if (remoteLogic)
+			remoteLogic.processInstance(akContainerRef)
+		endif
+	endif
 EndFunction
 
 Function addRecipe(BrewingRecipe recipeData)
