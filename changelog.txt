@@ -1,3 +1,6 @@
+v1.2.0
+Integrated Loggout v1.1.0
+
 v1.1.0
 Enhanced functionality for adding, replicating, and removing new recipes to and from container types
 
