@@ -1,6 +1,8 @@
 v1.2.0
 Integrated Loggout v1.1.0
 Implemented remote container logic access
+Implemented bulk recipe building using remote data
+Implemented automated container cleaning for Chronicle packages
 
 v1.1.0
 Enhanced functionality for adding, replicating, and removing new recipes to and from container types
