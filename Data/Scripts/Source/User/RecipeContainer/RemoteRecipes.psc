@@ -12,17 +12,25 @@ EndStruct
 InjectTec:Plugin Property Plugin Auto Const Mandatory
 RemoteRecipeDefinition[] Property RecipeDefinitions = None Auto Const
 
-Potion Function getPotion(Potion localForm = None, Int targetID = 0)
+Potion Function getPotion(InjectTec:Plugin targetPlugin, Potion localForm = None, Int targetID = 0)
 	if (localForm)
 		return localForm
 	endif
 	
-	return Plugin.lookupForm(targetID) as Potion
+	return targetPlugin.lookupForm(targetID) as Potion
+EndFunction
+
+Potion Function getUnprocessedPotion(RemoteRecipeDefinition dataSet)
+	return getPotion(Plugin, dataSet.UnprocessedForm, dataSet.UnprocessedID)
+EndFunction
+
+Potion Function getProcessedPotion(RemoteRecipeDefinition dataSet)
+	return getPotion(Plugin, dataSet.ProcessedForm, dataSet.ProcessedID)
 EndFunction
 
 BrewingRecipe Function buildRecipe(RemoteRecipeDefinition dataSet)
-	Potion unprocessedForm = getPotion(dataSet.UnprocessedForm, dataSet.UnprocessedID)
-	Potion processedForm = getPotion(dataSet.ProcessedForm, dataSet.ProcessedID)
+	Potion unprocessedForm = getUnprocessedPotion(dataSet)
+	Potion processedForm = getProcessedPotion(dataSet)
 	
 	if (!unprocessedForm || !processedForm)
 		return None
