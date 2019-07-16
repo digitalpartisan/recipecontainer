@@ -14,13 +14,13 @@ Int Property ProcessingTimerID = 1 Auto Const
 String sStateWaiting = "Waiting" Const
 String sStateProcessing = "Processing" Const
 
-Bool Function isCooling()
+Bool Function isProcessing()
 {A container is said to cool its contents if it either does not require power or if it requires and has power.  Otherwise (i.e. if it lacks required power) it is in a warming cycle.}
 	return !PowerRequired || IsPowered()
 EndFunction
 
 Bool Function needsProcessing()
-	Bool bResult = ContainerType.instanceNeedsProcessing(self)
+	Bool bResult = ContainerType.canProcessInstance(self)
 	RecipeContainer:Logger.logNeedsProcessing(self, bResult)
 	return bResult
 EndFunction
@@ -101,7 +101,7 @@ State Processing
 	
 	Function requestNextCycle()
 	{When the container is anticipates the need to process contents, verify that doing so is appropriate at this time and if so, request a timer event for the next processing round.}
-		if (ContainerType.instanceNeedsProcessing(self))
+		if (ContainerType.canProcessInstance(self))
 			StartTimerGameTime(ContainerType.CycleHours, ProcessingTimerID)
 		else
 			GoToState(sStateWaiting)

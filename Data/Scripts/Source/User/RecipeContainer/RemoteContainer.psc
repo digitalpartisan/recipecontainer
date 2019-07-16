@@ -1,13 +1,11 @@
 Scriptname RecipeContainer:RemoteContainer extends Quest
 
+Import InjectTec:Utility:HexidecimalLogic
+
 InjectTec:Plugin Property TargetPlugin Auto Const Mandatory
-Int Property TargetID Auto Const Mandatory
+Int Property TargetID Auto Const
+DigitSet Property TargetDigits Auto Const Mandatory
 
 RecipeContainer:Logic Function lookup()
-	if (!TargetPlugin.isInstalled())
-		return None
-	endif
-	
-	Form target = TargetPlugin.lookupForm(TargetID)
-	return target as RecipeContainer:Logic
+	return InjectTec:Utility:Form.load(None, TargetPlugin, TargetID, TargetDigits) as RecipeContainer:Logic
 EndFunction

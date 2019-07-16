@@ -1,0 +1,3 @@
+Scriptname RecipeContainer:Utility:Container Hidden Const
+
+Import DialogueDrinkingBuddyScript

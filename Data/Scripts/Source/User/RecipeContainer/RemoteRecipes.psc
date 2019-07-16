@@ -1,6 +1,7 @@
 Scriptname RecipeContainer:RemoteRecipes extends Quest
 
 Import DialogueDrinkingBuddyScript
+Import InjectTec:Utility:HexidecimalLogic
 
 Struct RemoteRecipeDefinition
 	Potion UnprocessedForm = None
@@ -17,7 +18,7 @@ Potion Function getPotion(InjectTec:Plugin targetPlugin, Potion localForm = None
 		return localForm
 	endif
 	
-	return targetPlugin.lookupForm(targetID) as Potion
+	return targetPlugin.lookup(targetID) as Potion
 EndFunction
 
 Potion Function getUnprocessedPotion(RemoteRecipeDefinition dataSet)
@@ -36,7 +37,7 @@ BrewingRecipe Function buildRecipe(RemoteRecipeDefinition dataSet)
 		return None
 	endif
 	
-	return RecipeContainer:Utility.createRecipe(unprocessedForm, processedForm)
+	return RecipeContainer:Utility:Recipe.create(unprocessedForm, processedForm)
 EndFunction
 
 BrewingRecipe[] Function buildRecipes()

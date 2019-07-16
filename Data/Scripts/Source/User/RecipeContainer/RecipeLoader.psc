@@ -1,0 +1,1 @@
+Scriptname RecipeContainer:RecipeLoader extends Quest

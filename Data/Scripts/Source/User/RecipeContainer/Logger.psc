@@ -18,11 +18,15 @@ Bool Function error(String sMessage) Global
 	return Loggout.error(getName(), sMessage)
 EndFunction
 
-Bool Function logCycle(RecipeContainer:ContainerInstance akContainerRef) Global
-	return log(akContainerRef + " processing, cooling: " + akContainerRef.isCooling())
+Bool Function logBehaviorUndefined(ScriptObject object, String sFunctionName) Global
+	return warn(object + " is missing a definition for the behavior " + sFunctionName)
 EndFunction
 
-Bool Function logReplacement(RecipeContainer:ContainerInstance akContainerRef, Potion apSearch, Potion apReplace, Int iCount) Global
+Bool Function logCycle(RecipeContainer:ContainerInstance akContainerRef) Global
+	return log(akContainerRef + " processing, processing: " + akContainerRef.isProcessing())
+EndFunction
+
+Bool Function logReplacement(ObjectReference akContainerRef, Potion apSearch, Potion apReplace, Int iCount) Global
 	return log(akContainerRef + " replaced " + iCount + " of " + apSearch + " with " + apReplace)
 EndFunction
 
