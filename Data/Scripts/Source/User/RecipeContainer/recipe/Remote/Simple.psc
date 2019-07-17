@@ -6,11 +6,10 @@ InjectTec:Plugin Property Plugin Auto Const Mandatory
 DigitSet Property UnprocessedDigits Auto Const Mandatory
 DigitSet Property ProcessedDigits Auto Const Mandatory
 
-Potion Function getUnprocessedForm()
+Form Function getUnprocessedForm()
 	RecipeContainer:Utility:Remote.loadDigits(Plugin, UnprocessedDigits)
 EndFunction
 
-Potion Function getProcessedForm()
+Form Function getProcessedForm()
 	RecipeContainer:Utility:Remote.loadDigits(Plugin, ProcessedDigits)
 EndFunction
-

@@ -6,6 +6,7 @@ This functionality is here and not handled by the container instance script beca
 
 Import DialogueDrinkingBuddyScript
 Import RecipeContainer:Utility:Processing
+Import RecipeContainer:Utility:Recipe
 
 Float Property CycleHours = 3.0 Auto Const
 {The number of in-game hours required to either cool drinks or cause them to become warm}
@@ -16,33 +17,37 @@ RecipeContainer:Logic:Remote Property RemoteContainer Auto
 FormList Property ProcessingForms Auto Const Mandatory
 FormList Property ReverseProcessingForms Auto Const Mandatory
 
-BrewingRecipe[] builtRecipes = None
+SimpleRecipe[] builtRecipes = None
 ProcessPattern[] processingPatterns = None
 ProcessPattern[] reverseProcessingPatterns = None
 
 Function buildRecipes()
 	if (!builtRecipes)
-		builtRecipes = new BrewingRecipe[0]
+		builtRecipes = new SimpleRecipe[0]
 	endif
 	builtRecipes.Clear() ; in case the variable was already set
 	
-	ingestBuilder(MyBuilder)
+	utilizeBuilder(MyBuilder)
 	rebuildProcessingData()
 EndFunction	
 
-BrewingRecipe[] Function getRecipes()
+SimpleRecipe[] Function getRecipes()
 	return builtRecipes
 EndFunction
 
-Function setRecipes(BrewingRecipe[] recipes)
+Function setRecipes(SimpleRecipe[] recipes)
 	builtRecipes = recipes
 EndFunction
 
-Function augmentRecipes(BrewingRecipe[] recipes)
-	setRecipes(Jiffy:Utility:Array.union(getRecipes() as Var[], recipes as Var[]) as BrewingRecipe[])
+Function augmentRecipes(SimpleRecipe[] recipes)
+	setRecipes(Jiffy:Utility:Array.union(getRecipes() as Var[], recipes as Var[]) as SimpleRecipe[])
 EndFunction
 
-Function ingestBuilder(RecipeContainer:Recipe:Builder builder)
+Function contractRecipes(SimpleRecipe[] recipes)
+	setRecipes(Jiffy:Utility:Array.difference(getRecipes() as Var[], recipes as Var[]) as SimpleRecipe[])
+EndFunction
+
+Function utilizeBuilder(RecipeContainer:Recipe:Builder builder)
 	if (!builder)
 		return
 	endif
@@ -50,12 +55,20 @@ Function ingestBuilder(RecipeContainer:Recipe:Builder builder)
 	augmentRecipes(builder.buildRecipes())
 EndFunction
 
+Function impedeBuilder(RecipeContainer:Recipe:Builder builder)
+	if (!builder)
+		return
+	endif
+	
+	contractRecipes(builder.buildRecipes())
+EndFunction
+
 Float Function getCycleHours()
 	return CycleHours
 EndFunction
 
 Function rebuildProcessingData()
-	BrewingRecipe[] myRecipes = getRecipes()
+	SimpleRecipe[] myRecipes = getRecipes()
 	
 	ProcessingForms.Revert()
 	if (!processingPatterns)

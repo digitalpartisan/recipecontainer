@@ -1,12 +1,12 @@
 Scriptname RecipeContainer:Recipe:Local extends RecipeContainer:Recipe Hidden Const
 
-Potion Property Unprocessed Auto Const Mandatory
-Potion Property Processed Auto Const Mandatory
+Form Property Unprocessed Auto Const Mandatory
+Form Property Processed Auto Const Mandatory
 
-Potion Function getUnprocessedForm()
+Form Function getUnprocessedForm()
 	return Unprocessed
 EndFunction
 
-Potion Function getProcessedForm()
+Form Function getProcessedForm()
 	return Processed
 EndFunction

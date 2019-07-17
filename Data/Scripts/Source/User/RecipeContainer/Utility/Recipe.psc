@@ -2,23 +2,52 @@ Scriptname RecipeContainer:Utility:Recipe Hidden Const
 
 Import DialogueDrinkingBuddyScript
 
-BrewingRecipe Function create(Potion unprocessedVariant, Potion processedVariant) Global
+Struct SimpleRecipe
+	Form unprocessed
+	Form processed
+EndStruct
+
+SimpleRecipe Function create(Form unprocessedVariant, Form processedVariant) Global
 	if (!unprocessedVariant || !processedVariant)
 		return None
 	endif
 	
-	BrewingRecipe newRecipe = new BrewingRecipe
-	newRecipe.WarmDrinkVariant = unprocessedVariant
-	newRecipe.ColdDrinkVariant = processedVariant
+	SimpleRecipe newRecipe = new SimpleRecipe
+	newRecipe.unprocessed = unprocessedVariant
+	newRecipe.processed = processedVariant
 	
 	return newRecipe
 EndFunction
 
-Bool Function validate(BrewingRecipe recipe) Global
-	return recipe && recipe.WarmDrinkVariant && recipe.ColdDrinkVariant
+SimpleRecipe Function createFromBrewingRecipe(BrewingRecipe recipe) Global
+	if (!recipe)
+		return None
+	endif
+	
+	return create(recipe.WarmDrinkVariant, recipe.ColdDrinkVariant)
 EndFunction
 
-Bool Function clean(BrewingRecipe[] recipes) Global
+SimpleRecipe[] Function createFromBulkBrewingRecipe(BrewingRecipe[] recipes) Global
+	if (!recipes || !recipes.Length)
+		return None
+	endif
+	
+	SimpleRecipe[] results = new SimpleRecipe[0]
+	
+	Int iCounter = 0
+	while (iCounter < recipes.Length)
+		results.Add(createFromBrewingRecipe(recipes[iCounter]))
+		iCounter += 1
+	endWhile
+	
+	return results
+EndFunction
+
+Bool Function validate(SimpleRecipe recipe) Global
+	return recipe && recipe.unprocessed && recipe.processed
+EndFunction
+
+Bool Function clean(SimpleRecipe[] recipes) Global
 	Int iCounter = 0
 	Bool bResult = false
 	

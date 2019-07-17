@@ -1,6 +1,6 @@
-Scriptname RecipeContainer:Recipe:Builder extends Quest Conditional
+Scriptname RecipeContainer:Recipe:Builder extends Quest
 
-Import DialogueDrinkingBuddyScript
+Import RecipeContainer:Utility:Recipe
 
 Struct RemoteRecipeDefinition
 	Potion UnprocessedForm = None
@@ -13,15 +13,15 @@ RemoteRecipeDefinition[] Property RecipeDefinitions = None Auto Const
 
 RecipeContainer:Recipe[] Property Recipes Auto Const Mandatory
 
-BrewingRecipe[] Function buildRecipes()
+SimpleRecipe[] Function buildRecipes()
 	if (!Recipes)
 		return None
 	endif
 
-	BrewingRecipe[] brewables = new BrewingRecipe[0]
+	SimpleRecipe[] builtRecipes = new SimpleRecipe[0]
 	Int iCounter = 0
 	RecipeContainer:Recipe recipe = None
-	BrewingRecipe newRecipe = None
+	SimpleRecipe newRecipe = None
 	while (iCounter < RecipeDefinitions.Length)
 		recipe = Recipes[iCounter]
 		if (!recipe)
@@ -33,9 +33,9 @@ BrewingRecipe[] Function buildRecipes()
 			return None
 		endif
 		
-		brewables.Add(newRecipe)
+		builtRecipes.Add(newRecipe)
 		iCounter += 1
 	endWhile
 	
-	return brewables
+	return builtRecipes
 EndFunction

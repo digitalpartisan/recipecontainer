@@ -3,22 +3,22 @@ Scriptname RecipeContainer:Utility:Processing Hidden Const
 Import DialogueDrinkingBuddyScript
 
 Struct ProcessPattern
-	Potion search
-	Potion replace
+	Form search
+	Form replace
 EndStruct
 
 Bool Function validatePattern(ProcessPattern pattern) Global
 	return (pattern && pattern.search && pattern.replace)
 EndFunction
 
-ProcessPattern Function create(BrewingRecipe recipe) Global
+ProcessPattern Function create(RecipeContainer:Utility:Recipe:SimpleRecipe recipe) Global
 	if (!RecipeContainer:Utility:Recipe.validate(recipe))
 		return None
 	endif
 	
 	ProcessPattern pattern = new ProcessPattern
-	pattern.search = recipe.WarmDrinkVariant
-	pattern.replace = recipe.ColdDrinkVariant
+	pattern.search = recipe.unprocessed
+	pattern.replace = recipe.processed
 	
 	return pattern
 EndFunction

@@ -26,7 +26,7 @@ Bool Function logCycle(RecipeContainer:ContainerInstance akContainerRef) Global
 	return log(akContainerRef + " processing, processing: " + akContainerRef.isProcessing())
 EndFunction
 
-Bool Function logReplacement(ObjectReference akContainerRef, Potion apSearch, Potion apReplace, Int iCount) Global
+Bool Function logReplacement(ObjectReference akContainerRef, Form apSearch, Form apReplace, Int iCount) Global
 	return log(akContainerRef + " replaced " + iCount + " of " + apSearch + " with " + apReplace)
 EndFunction
 

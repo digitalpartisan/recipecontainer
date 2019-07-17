@@ -1,6 +1,6 @@
 Scriptname RecipeContainer:RemoteRecipes extends Quest
 
-Import DialogueDrinkingBuddyScript
+Import RecipeContainer:Utility:Recipe
 Import InjectTec:Utility:HexidecimalLogic
 
 Struct RemoteRecipeDefinition
@@ -13,41 +13,41 @@ EndStruct
 InjectTec:Plugin Property Plugin Auto Const Mandatory
 RemoteRecipeDefinition[] Property RecipeDefinitions = None Auto Const
 
-Potion Function getPotion(InjectTec:Plugin targetPlugin, Potion localForm = None, Int targetID = 0)
+Form Function getPotion(InjectTec:Plugin targetPlugin, Potion localForm = None, Int targetID = 0)
 	if (localForm)
 		return localForm
 	endif
 	
-	return targetPlugin.lookup(targetID) as Potion
+	return targetPlugin.lookup(targetID)
 EndFunction
 
-Potion Function getUnprocessedPotion(RemoteRecipeDefinition dataSet)
+Form Function getUnprocessedPotion(RemoteRecipeDefinition dataSet)
 	return getPotion(Plugin, dataSet.UnprocessedForm, dataSet.UnprocessedID)
 EndFunction
 
-Potion Function getProcessedPotion(RemoteRecipeDefinition dataSet)
+Form Function getProcessedPotion(RemoteRecipeDefinition dataSet)
 	return getPotion(Plugin, dataSet.ProcessedForm, dataSet.ProcessedID)
 EndFunction
 
-BrewingRecipe Function buildRecipe(RemoteRecipeDefinition dataSet)
-	Potion unprocessedForm = getUnprocessedPotion(dataSet)
-	Potion processedForm = getProcessedPotion(dataSet)
+SimpleRecipe Function buildRecipe(RemoteRecipeDefinition dataSet)
+	Form unprocessedForm = getUnprocessedPotion(dataSet)
+	Form processedForm = getProcessedPotion(dataSet)
 	
 	if (!unprocessedForm || !processedForm)
 		return None
 	endif
 	
-	return RecipeContainer:Utility:Recipe.create(unprocessedForm, processedForm)
+	return create(unprocessedForm, processedForm)
 EndFunction
 
-BrewingRecipe[] Function buildRecipes()
+SimpleRecipe[] Function buildRecipes()
 	if (!RecipeDefinitions)
 		return None
 	endif
 
-	BrewingRecipe[] recipes = new BrewingRecipe[0]
+	SimpleRecipe[] recipes = new SimpleRecipe[0]
 	Int iCounter = 0
-	BrewingRecipe newRecipe = None
+	SimpleRecipe newRecipe = None
 	while (iCounter < RecipeDefinitions.Length)
 		newRecipe = buildRecipe(RecipeDefinitions[iCounter])
 		if (!newRecipe)

@@ -1,15 +1,13 @@
 Scriptname RecipeContainer:Recipe extends Quest Hidden Const
 
-Import DialogueDrinkingBuddyScript
-
-Potion Function getUnprocessedForm()
+Form Function getUnprocessedForm()
 	RecipeContainer:Logger.logBehaviorUndefined(self, "getUnprocessedForm")
 EndFunction
 
-Potion Function getProcessedForm()
+Form Function getProcessedForm()
 	RecipeContainer:Logger.logBehaviorUndefined(self, "getProcessedForm")
 EndFunction
 
-BrewingRecipe Function get()
+RecipeContainer:Utility:Recipe:SimpleRecipe Function get()
 	return RecipeContainer:Utility:Recipe.create(getUnprocessedForm(), getProcessedForm())
 EndFunction

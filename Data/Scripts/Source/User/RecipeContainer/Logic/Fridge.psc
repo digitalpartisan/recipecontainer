@@ -7,5 +7,5 @@ DialogueDrinkingBuddyScript Property DialogueDrinkingBuddy Auto Const Mandatory
 
 Function buildRecipes()
 	parent.buildRecipes()
-	setRecipes(Jiffy:Utility:Array.union(getRecipes() as Var[], DialogueDrinkingBuddy.BrewingRecipes as Var[]) as BrewingRecipe[])
+	augmentRecipes(RecipeContainer:Utility:Recipe.createFromBulkBrewingRecipe(DialogueDrinkingBuddy.BrewingRecipes))
 EndFunction	

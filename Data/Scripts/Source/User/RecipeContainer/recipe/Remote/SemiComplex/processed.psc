@@ -1,9 +1,9 @@
 Scriptname RecipeContainer:Recipe:Remote:SemiComplex:Processed extends RecipeContainer:Recipe:Remote:SemiComplex
 
-Potion Function getUnprocessedForm()
+Form Function getUnprocessedForm()
 	return LocalForm
 EndFunction
 
-Potion Function getProcessedForm()
+Form Function getProcessedForm()
 	RecipeContainer:Utility:Remote.loadDigits(Plugin, RemoteDigits)
 EndFunction
