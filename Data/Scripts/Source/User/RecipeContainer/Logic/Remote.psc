@@ -1,27 +1,77 @@
-Scriptname RecipeContainer:Logic:Remote extends Quest
+Scriptname RecipeContainer:Logic:Remote extends RecipeContainer:Logic
 
 Import InjectTec:Utility:HexidecimalLogic
 
 InjectTec:Plugin Property TargetPlugin Auto Const Mandatory
-Int Property TargetID Auto Const
 DigitSet Property TargetDigits Auto Const Mandatory
 
-RecipeContainer:Logic Function lookup()
-	return InjectTec:Plugin.fetchFromDigits(TargetPlugin, TargetDigits) as RecipeContainer:Logic
+RecipeContainer:Logic:Local remoteContainerType = None
+
+RecipeContainer:Logic:Local Function lookupRemoteContainerType()
+	if (!TargetPlugin || !TargetDigits)
+		RecipeContainer:Logger:Logic.remoteNotLoaded(self)
+		return None
+	endif
+	
+	RecipeContainer:Logic:Local remoteLogic = TargetPlugin.lookupWithDigits(TargetDigits) as RecipeContainer:Logic:Local
+	if (remoteLogic)
+		RecipeContainer:Logger:Logic.remoteLoaded(self, remoteLogic)
+		return remoteLogic
+	endif
+	
+	RecipeContainer:Logger:Logic.remoteNotLoaded(self)
+	return None
 EndFunction
 
-Bool Function canProcessInstance(RecipeContainer:ContainerInstance akContainerRef)
-	RecipeContainer:Logic remoteLogic = lookup()
-	if (remoteLogic)
-		return remoteLogic.canProcessInstance(akContainerRef)
+Function setRemoteContainerType(RecipeContainer:Logic:Local newValue)
+	remoteContainerType = newValue
+EndFunction
+
+Function refresh()
+	setRemoteContainerType(lookupRemoteContainerType())
+EndFunction
+
+RecipeContainer:Logic:Local Function getRemoteContainerType()
+	if (!remoteContainerType)
+		refresh()
+	endif
+	
+	if (!remoteContainerType)
+		RecipeContainer:Logger:Logic.logRemoteNotFound(self)
+	endif
+	
+	return remoteContainerType
+EndFunction
+
+Float Function getCycleHours()
+	RecipeContainer:Logic:Local remoteContainer = getRemoteContainerType()
+	if (remoteContainer)
+		return remoteContainer.getCycleHours()
+	endif
+	
+	return parent.getCycleHours()
+EndFunction
+
+Bool Function canProcessHelper(RecipeContainer:ContainerInstance akContainerRef)
+	RecipeContainer:Logic:Local remoteContainer = getRemoteContainerType()
+	if (remoteContainer)
+		return remoteContainer.canProcessContainerInstance(akContainerRef)
 	endif
 	
 	return false
 EndFunction
 
-Function processInstance(RecipeContainer:ContainerInstance akContainerRef)
-	RecipeContainer:Logic remoteLogic = lookup()
-	if (remoteLogic)
-		remoteLogic.processInstance(akContainerRef)
+Function processHelper(RecipeContainer:ContainerInstance akContainerRef)
+	RecipeContainer:Logic:Local remoteContainer = getRemoteContainerType()
+	if (remoteContainer)
+		remoteContainer.processContainerInstance(akContainerRef)
 	endif
+EndFunction
+
+Function readyHelper()
+	refresh()
+EndFunction
+
+Function shutdownHelper()
+	setRemoteContainerType(None)
 EndFunction

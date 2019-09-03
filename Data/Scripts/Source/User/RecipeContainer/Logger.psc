@@ -7,15 +7,15 @@ String Function getName() Global
 EndFunction
 
 Bool Function log(String sMessage) Global
-	return Loggout.log(getName(), sMessage)
+	return Jiffy:Loggout.log(getName(), sMessage)
 EndFunction
 
 Bool Function warn(String sMessage) Global
-	return Loggout.warn(getName(), sMessage)
+	return Jiffy:Loggout.warn(getName(), sMessage)
 EndFunction
 
 Bool Function error(String sMessage) Global
-	return Loggout.error(getName(), sMessage)
+	return Jiffy:Loggout.error(getName(), sMessage)
 EndFunction
 
 Bool Function logBehaviorUndefined(ScriptObject object, String sFunctionName) Global
@@ -54,22 +54,6 @@ Bool Function logCleaning(RecipeContainer:Logic akContainerType) Global
 	return log(akContainerType + " is being cleaned")
 EndFunction
 
-Bool Function logAddingRecipes(RecipeContainer:Logic akContainerType, BrewingRecipe[] recipes) Global
-	return log(akContainerType + " is adding recipes: " + recipes)
-EndFunction
-
-Bool Function logRemovingRecipes(RecipeContainer:Logic akContainerType, BrewingRecipe[] recipes) Global
-	return log(akContainerType + " is removing recipes: " + recipes)
-EndFunction
-
-Bool Function logAppendContainerRecipes(RecipeContainer:Logic targetContainer, RecipeContainer:Logic sourceContainer) Global
-	return log(targetContainer + " is appending recipes from container " + sourceContainer)
-EndFunction
-
-Bool Function logRemoveContainerRecipes(RecipeContainer:Logic targetContainer, RecipeContainer:Logic sourceContainer) Global
-	return log(targetContainer + " is removing recipes from container " + sourceContainer)
-EndFunction
-
-Bool Function logContainerRecipes(RecipeContainer:Logic targetContainer) Global
-	return log(targetContainer + " has recipes: " + targetContainer.CustomRecipes)
+Bool Function logBrewingRecipeConversion(DialogueDrinkingBuddyScript:BrewingRecipe oldRecipe, RecipeContainer:Utility:Recipe:SimpleRecipe newRecipe) Global
+	return log("converted " + oldRecipe + " to " + newRecipe)
 EndFunction

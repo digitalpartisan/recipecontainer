@@ -1,158 +1,114 @@
-Scriptname RecipeContainer:Logic extends Quest
+Scriptname RecipeContainer:Logic extends Quest Hidden
 {Attach this script in the editor to define a type of container (ex. a "fridge") to specify how long the container takes to work and what recipes the type of container can put into effect.
 Because of the use of drinking buddy recipes elsewhere in the game, this library makes use of them, though without the issue of whether or not the player has found a holotape for each recipe.
 This decision was made largely because of the volume of existing recipes in the game files already which means this library can make use of them.
 This functionality is here and not handled by the container instance script because doing so centralizes access to recipe options and removes anything not specifically required to determine the state of any particular container, which simplifies the container instance script.}
 
 Import DialogueDrinkingBuddyScript
-Import RecipeContainer:Utility:Processing
-Import RecipeContainer:Utility:Recipe
 
-Float Property CycleHours = 3.0 Auto Const
-{The number of in-game hours required to either cool drinks or cause them to become warm}
-RecipeContainer:Recipe:Builder Property MyBuilder Auto Const
 BrewingRecipe[] Property CustomRecipes Auto
-{The recipes specific to this type of container will use to process contents.}
-RecipeContainer:Logic:Remote Property RemoteContainer Auto
-FormList Property ProcessingForms Auto Const Mandatory
-FormList Property ReverseProcessingForms Auto Const Mandatory
-
-SimpleRecipe[] builtRecipes = None
-ProcessPattern[] processingPatterns = None
-ProcessPattern[] reverseProcessingPatterns = None
-
-Function buildRecipes()
-	if (!builtRecipes)
-		builtRecipes = new SimpleRecipe[0]
-	endif
-	builtRecipes.Clear() ; in case the variable was already set
-	
-	utilizeBuilder(MyBuilder)
-	rebuildProcessingData()
-EndFunction	
-
-SimpleRecipe[] Function getRecipes()
-	return builtRecipes
-EndFunction
-
-Function setRecipes(SimpleRecipe[] recipes)
-	builtRecipes = recipes
-EndFunction
-
-Function augmentRecipes(SimpleRecipe[] recipes)
-	setRecipes(Jiffy:Utility:Array.union(getRecipes() as Var[], recipes as Var[]) as SimpleRecipe[])
-EndFunction
-
-Function contractRecipes(SimpleRecipe[] recipes)
-	setRecipes(Jiffy:Utility:Array.difference(getRecipes() as Var[], recipes as Var[]) as SimpleRecipe[])
-EndFunction
-
-Function utilizeBuilder(RecipeContainer:Recipe:Builder builder)
-	if (!builder)
-		return
-	endif
-	
-	augmentRecipes(builder.buildRecipes())
-EndFunction
-
-Function impedeBuilder(RecipeContainer:Recipe:Builder builder)
-	if (!builder)
-		return
-	endif
-	
-	contractRecipes(builder.buildRecipes())
-EndFunction
 
 Float Function getCycleHours()
-	return CycleHours
+	return 1
+EndFunction
+
+Function rebuildRecipesHelper()
+	
 EndFunction
 
 Function rebuildProcessingData()
-	SimpleRecipe[] myRecipes = getRecipes()
 	
-	ProcessingForms.Revert()
-	if (!processingPatterns)
-		processingPatterns = new ProcessPattern[0]
-	endif
-	processingPatterns.Clear()
-	
-	ReverseProcessingForms.Revert()
-	if (!reverseProcessingPatterns)
-		reverseProcessingPatterns = new ProcessPattern[0]
-	endif
-	reverseProcessingPatterns.Clear()
-	
-	if (!myRecipes || !myRecipes.Length)
-		return
-	endif
-	
-	Int iCounter = 0
-	ProcessPattern newPattern = None
-	ProcessPattern newReversal = None
-	while (iCounter < myRecipes.Length)
-		newPattern = RecipeContainer:Utility:Processing.create(myRecipes[iCounter])
-		newReversal = reverse(newPattern)
-		
-		if (newPattern && newReversal)
-			processingPatterns.Add(newPattern)
-			ProcessingForms.AddForm(newPattern.search)
-			
-			reverseProcessingPatterns.Add(newReversal)
-			ReverseProcessingForms.AddForm(newReversal.search)
-		endif
-		
-		iCounter += 1
-	endWhile
 EndFunction
 
-FormList Function getSearchFormsForInstance(RecipeContainer:ContainerInstance akContainerRef)
-	if (!akContainerRef)
-		return None
-	endif
+Bool Function canProcessHelper(RecipeContainer:ContainerInstance akContainerRef)
 	
-	if (akContainerRef.isProcessing())
-		return ProcessingForms
-	endif
-	
-	return ReverseProcessingForms
 EndFunction
 
-ProcessPattern[] Function getProcessPatternsForInstance(RecipeContainer:ContainerInstance akContainerRef)
-	if (!akContainerRef)
-		return None
-	endif
-	
-	if (akContainerRef.isProcessing())
-		return processingPatterns
-	endif
-	
-	return reverseProcessingPatterns
+Bool Function canProcessContainerInstance(RecipeContainer:ContainerInstance akContainerRef)
+	return false
 EndFunction
 
-Bool Function canProcessInstance(RecipeContainer:ContainerInstance akContainerRef)
-	if (RemoteContainer)
-		return RemoteContainer.canProcessInstance(akContainerRef)
-	endif
+Function processHelper(RecipeContainer:ContainerInstance akContainerRef)
 	
-	return akContainerRef.GetItemCount(getSearchFormsForInstance(akContainerRef))
 EndFunction
 
-Function processInstance(RecipeContainer:ContainerInstance akContainerRef)
-	if (RemoteContainer)
-		RemoteContainer.processInstance(akContainerRef)
-		return
-	endif
+Function processContainerInstance(RecipeContainer:ContainerInstance akContainerRef)
 	
-	RecipeContainer:Logger.logCycle(akContainerRef)
-	RecipeContainer:Utility:Processing.processReference(akContainerRef, getProcessPatternsForInstance(akContainerRef))
+EndFunction
+
+Function cleanHelper()
+
 EndFunction
 
 Function clean()
-	RecipeContainer:Logger.logCleaning(self)
-	if (RecipeContainer:Utility:Recipe.clean(getRecipes()))
-		rebuildProcessingData()
-	endif
+	
 EndFunction
+
+Function addBuilder(RecipeContainer:Recipe:Builder builder)
+	
+EndFunction
+
+Function removeBuilder(RecipeContainer:Recipe:Builder builder)
+	
+EndFunction
+
+Function listenForRecipeUpdates()
+	
+EndFunction
+
+Function stopListeningForRecipeUpdates()
+
+EndFunction
+
+Function addMyBuilders()
+	
+EndFunction
+
+Function readyHelper()
+
+EndFunction
+
+Function shutdownHelper()
+
+EndFunction
+
+Auto State Waiting
+	Event OnQuestInit()
+		GoToState("Ready")
+	EndEvent
+EndState
+
+State Ready
+	Event OnBeginState(String asOldState)
+		readyHelper()
+	EndEvent
+	
+	Event OnQuestShutdown()
+		GoToState("Shutdown")
+	EndEvent
+	
+	Function rebuildProcessingData()
+		rebuildRecipesHelper()
+	EndFunction
+	
+	Bool Function canProcessContainerInstance(RecipeContainer:ContainerInstance akContainerRef)
+		return canProcessHelper(akContainerRef)
+	EndFunction
+	
+	Function processContainerInstance(RecipeContainer:ContainerInstance akContainerRef)
+		processHelper(akContainerRef)
+	EndFunction
+	
+	Function clean()
+		cleanHelper()
+	EndFunction
+EndState
+
+State Shutdown
+	Event OnBeginState(String asOldState)
+		shutdownHelper()
+	EndEvent
+EndState
 
 Function cleanBulk(RecipeContainer:Logic[] containerTypes) Global
 	if (!containerTypes || !containerTypes.Length)
@@ -165,6 +121,40 @@ Function cleanBulk(RecipeContainer:Logic[] containerTypes) Global
 		currentType = containerTypes[iCounter]
 		if (currentType)
 			currentType.clean()
+		endif
+		
+		iCounter += 1
+	endWhile
+EndFunction
+
+Function startBulk(RecipeContainer:Logic[] containerTypes) Global
+	if (!containerTypes || !containerTypes.Length)
+		return
+	endif
+	
+	Int iCounter = 0
+	RecipeContainer:Logic currentType = None
+	while (iCounter < containerTypes.Length)
+		currentType = containerTypes[iCounter]
+		if (currentType)
+			currentType.Start()
+		endif
+		
+		iCounter += 1
+	endWhile
+EndFunction
+
+Function stopBulk(RecipeContainer:Logic[] containerTypes) Global
+	if (!containerTypes || !containerTypes.Length)
+		return
+	endif
+	
+	Int iCounter = 0
+	RecipeContainer:Logic currentType = None
+	while (iCounter < containerTypes.Length)
+		currentType = containerTypes[iCounter]
+		if (currentType)
+			currentType.Stop()
 		endif
 		
 		iCounter += 1

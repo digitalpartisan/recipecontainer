@@ -11,6 +11,10 @@ Bool Function validatePattern(ProcessPattern pattern) Global
 	return (pattern && pattern.search && pattern.replace)
 EndFunction
 
+Bool Function compare(ProcessPattern patternOne, ProcessPattern patternTwo) Global
+	return (patternOne && patternTwo && (patternOne.search == patternTwo.search) && (patternOne.replace == patternTwo.replace))
+EndFunction
+
 ProcessPattern Function create(RecipeContainer:Utility:Recipe:SimpleRecipe recipe) Global
 	if (!RecipeContainer:Utility:Recipe.validate(recipe))
 		return None

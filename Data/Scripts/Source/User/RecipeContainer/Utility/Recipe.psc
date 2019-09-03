@@ -24,10 +24,12 @@ SimpleRecipe Function createFromBrewingRecipe(BrewingRecipe recipe) Global
 		return None
 	endif
 	
-	return create(recipe.WarmDrinkVariant, recipe.ColdDrinkVariant)
+	SimpleRecipe converted = create(recipe.WarmDrinkVariant, recipe.ColdDrinkVariant)
+	;RecipeContainer:Logger.logBrewingRecipeConversion(recipe, converted)
+	return converted
 EndFunction
 
-SimpleRecipe[] Function createFromBulkBrewingRecipe(BrewingRecipe[] recipes) Global
+SimpleRecipe[] Function createFromBulkBrewingRecipes(BrewingRecipe[] recipes) Global
 	if (!recipes || !recipes.Length)
 		return None
 	endif
@@ -41,6 +43,21 @@ SimpleRecipe[] Function createFromBulkBrewingRecipe(BrewingRecipe[] recipes) Glo
 	endWhile
 	
 	return results
+EndFunction
+
+Bool Function compare(SimpleRecipe recipeOne, SimpleRecipe recipeTwo) Global
+	Bool bOneValid = validate(recipeOne)
+	Bool bTwoValid = validate(recipeTwo)
+
+	if (!bOneValid && !bTwoValid)
+		return true ; Invalid is equal for our purposes
+	endif
+	
+	if (!bOneValid || !bTwoValid)
+		return false ; one, but not both, is invalid, so they're not equal
+	endif
+	
+	return (recipeOne.unprocessed == recipeTwo.unprocessed && recipeOne.processed == recipeTwo.processed) ; they're both valid, so precise equality is the remaining criteria
 EndFunction
 
 Bool Function validate(SimpleRecipe recipe) Global

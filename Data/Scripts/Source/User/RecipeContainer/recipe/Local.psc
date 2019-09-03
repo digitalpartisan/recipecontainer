@@ -1,7 +1,9 @@
-Scriptname RecipeContainer:Recipe:Local extends RecipeContainer:Recipe Hidden Const
+Scriptname RecipeContainer:Recipe:Local extends RecipeContainer:Recipe
 
-Form Property Unprocessed Auto Const Mandatory
-Form Property Processed Auto Const Mandatory
+Group FormSettings
+	Form Property Unprocessed Auto Const Mandatory
+	Form Property Processed Auto Const Mandatory
+EndGroup
 
 Form Function getUnprocessedForm()
 	return Unprocessed

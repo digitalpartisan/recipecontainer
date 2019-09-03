@@ -1,4 +1,4 @@
-Scriptname RecipeContainer:Recipe extends Quest Hidden Const
+Scriptname RecipeContainer:Recipe extends Quest Hidden
 
 Form Function getUnprocessedForm()
 	RecipeContainer:Logger.logBehaviorUndefined(self, "getUnprocessedForm")

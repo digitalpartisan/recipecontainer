@@ -1,11 +1,16 @@
-Scriptname RecipeContainer:Recipe:Remote:Complex extends RecipeContainer:Recipe:Remote Hidden Const
+Scriptname RecipeContainer:Recipe:Remote:Complex extends RecipeContainer:Recipe:Remote Hidden
 
 Import InjectTec:Utility:HexidecimalLogic
 
-InjectTec:Plugin Property UnprocessedPlugin Auto Const Mandatory
-InjectTec:Plugin Property ProcessedPlugin Auto Const Mandatory
-DigitSet Property UnprocessedDigits Auto Const Mandatory
-DigitSet Property ProcessedDigits Auto Const Mandatory
+Group FormSettings
+	DigitSet Property UnprocessedDigits Auto Const Mandatory
+	DigitSet Property ProcessedDigits Auto Const Mandatory
+EndGroup
+
+Group PluginSettings
+	InjectTec:Plugin Property UnprocessedPlugin Auto Const Mandatory
+	InjectTec:Plugin Property ProcessedPlugin Auto Const Mandatory
+EndGroup
 
 Form Function getUnprocessedForm()
 	RecipeContainer:Utility:Remote.loadDigits(UnprocessedPlugin, UnprocessedDigits)

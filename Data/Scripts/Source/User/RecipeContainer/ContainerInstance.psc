@@ -4,6 +4,10 @@ This script handles the reference-specific state and timer events and only these
 from the game engine unless there are contents which could be processed in the cycle to be requested.  Doing so means that there are fewer stresses put on the game than would otherwise be the case.
 This involves some slight overhead involving multiple calls to instanceNeedsProcessing() on the container type object, but the bulk of these extraneous calls are expected to occur once before putting the script into the Waiting state.}
 
+Import RecipeContainer:Utility:Processing
+
+CustomEvent Processed
+
 RecipeContainer:Logic Property ContainerType Auto Const Mandatory
 {What sort of container this is.  See the RecipeContainer:Logic script for details.}
 Bool Property PowerRequired = true Auto Const
@@ -20,8 +24,8 @@ Bool Function isProcessing()
 EndFunction
 
 Bool Function needsProcessing()
-	Bool bResult = ContainerType.canProcessInstance(self)
-	RecipeContainer:Logger.logNeedsProcessing(self, bResult)
+	Bool bResult = ContainerType.canProcessContainerInstance(self)
+	RecipeContainer:Logger:ContainerInstance.needsProcessing(self, bResult)
 	return bResult
 EndFunction
 
@@ -37,8 +41,11 @@ Function restartCycle()
 EndFunction
 
 Function process()
-	ContainerType.processInstance(self)
-	requestNextCycle()
+	
+EndFunction
+
+Function useProcessPatterns(ProcessPattern[] patterns)
+
 EndFunction
 
 Function examineState()
@@ -56,25 +63,25 @@ Function examineState()
 EndFunction
 
 Event OnInit()
-	RecipeContainer:Logger.logInit(self)
+	RecipeContainer:Logger:ContainerInstance.initialization(self)
 	AddInventoryEventFilter(None)
 	examineState()
 EndEvent
 
 Event OnWorkshopObjectDestroyed(ObjectReference akActionRef)
-	RecipeContainer:Logger.logDestruction(self)
+	RecipeContainer:Logger:ContainerInstance.destruction(self)
 	cancelThisCycle() ; there's no reference left to receive event updates - timers or otherwise - do be polite and tell the game engine to disregard any timer that may be in progress.
 EndEvent
 
 Event OnPowerOn(ObjectReference akGenerator)
 {If power is applied, the container was previously warming.  Since it takes a certain number of hours to cool, that update needs to happen that number of hours from this event.}
-	RecipeContainer:Logger.logPowerEvent(self)
+	RecipeContainer:Logger:ContainerInstance.powerEvent(self)
 	examineState()
 EndEvent
 
 Event OnPowerOff()
 {See documentation for the power on event.  Ditto for previously cooling.  So many hours from this event, the next update needs to happen a cycle's worth of hours from now.}
-	RecipeContainer:Logger.logPowerEvent(self)
+	RecipeContainer:Logger:ContainerInstance.powerEvent(self)
 	examineState()
 EndEvent
 
@@ -82,11 +89,13 @@ Function requestNextCycle()
 {Required to be defined here so that it exists as empty in every state unless specifically defined therein.}
 EndFunction
 
+Function sendProcessedEvent(Bool bProcessed = true)
+	Var[] kArgs = new Var[1]
+	kArgs[0] = bProcessed
+	SendCustomEvent("Processed", kArgs)
+EndFunction
+
 Auto State Waiting
-	Event OnBeginState(String sPreviousState)
-		RecipeContainer:Logger.logState(self, sStateWaiting)
-	EndEvent
-	
 	Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemReference, ObjectReference akSourceContainer)
 	{This entire script is designed to prevent requesting timer events and running through a container's contents against the container type's recipe list unless there's somethign to process.  When something is added to the container, reconsider whether or not processing is appropriate, but only if a processing cycle is not already in effect.}
 		examineState() ; doing this only in a waiting state means that the item replacements made during processing will not trigger another examineState() call since it will be called at the end of processing
@@ -95,18 +104,8 @@ EndState
 
 State Processing
 	Event OnBeginState(String sPreviousState)
-		RecipeContainer:Logger.logState(self, sStateProcessing)
 		requestNextCycle()
 	EndEvent
-	
-	Function requestNextCycle()
-	{When the container is anticipates the need to process contents, verify that doing so is appropriate at this time and if so, request a timer event for the next processing round.}
-		if (ContainerType.canProcessInstance(self))
-			StartTimerGameTime(ContainerType.CycleHours, ProcessingTimerID)
-		else
-			GoToState(sStateWaiting)
-		endif
-	EndFunction
 	
 	Event OnTimerGameTime(Int aiTimerID)
 	{Event observer for timer updates from the game engine.  See requestNextCycle() and cancelThisCycle().  Note that this behavior only occurs in this state, so that timer events received in another state will just go away.  This is the desired behavior.}
@@ -114,4 +113,22 @@ State Processing
 			process()
 		endif
 	EndEvent
+	
+	Function requestNextCycle()
+	{When the container is anticipates the need to process contents, verify that doing so is appropriate at this time and if so, request a timer event for the next processing round.}
+		if (ContainerType.canProcessContainerInstance(self))
+			StartTimerGameTime(ContainerType.getCycleHours(), ProcessingTimerID)
+		else
+			GoToState(sStateWaiting)
+		endif
+	EndFunction
+	
+	Function useProcessPatterns(ProcessPattern[] patterns)
+		
+	EndFunction
+	
+	Function process()
+		ContainerType.processContainerInstance(self)
+		requestNextCycle()
+	EndFunction
 EndState

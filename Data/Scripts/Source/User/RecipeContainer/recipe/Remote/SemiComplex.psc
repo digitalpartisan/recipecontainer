@@ -1,4 +1,4 @@
-Scriptname RecipeContainer:Recipe:Remote:SemiComplex extends RecipeContainer:Recipe:Remote Hidden Const
+Scriptname RecipeContainer:Recipe:Remote:SemiComplex extends RecipeContainer:Recipe:Remote Hidden
 
 Import InjectTec:Utility:HexidecimalLogic
 

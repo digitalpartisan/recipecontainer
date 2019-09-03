@@ -1,5 +1,8 @@
-v1.3.0
+v2.0.0
 Switched to Jiffy to simplify library dependencies
+Eliminated reliance on Drinking Buddy's BrewingRecipe logic while still supporting all defined recipes in the Drinking Buddy data set
+Allows for 
+Made all logic thread-safe and incorporated just-in-time handling of events to prevent severe edge-case bugs
 
 v1.2.0
 Integrated Loggout v1.1.0

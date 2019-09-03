@@ -1,1 +1,1 @@
-Scriptname RecipeContainer:Recipe:Remote extends RecipeContainer:Recipe Hidden Const
+Scriptname RecipeContainer:Recipe:Remote extends RecipeContainer:Recipe Hidden
