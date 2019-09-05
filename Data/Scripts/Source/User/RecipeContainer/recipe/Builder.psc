@@ -1,7 +1,6 @@
 Scriptname RecipeContainer:Recipe:Builder extends RecipeContainer:Utility:Recipe:UpdateableList Hidden Conditional
 
 Import RecipeContainer:Utility:Recipe
-Import RecipeContainer:Utility:Processing
 
 Struct RemoteRecipeDefinition
 	Potion UnprocessedForm = None
@@ -59,10 +58,6 @@ EndFunction
 
 Function refreshProcessPatterns()
 	
-EndFunction
-
-ProcessPattern[] Function getProcessPatterns(Bool bForward = true)
-	return None
 EndFunction
 
 Auto State Waiting
