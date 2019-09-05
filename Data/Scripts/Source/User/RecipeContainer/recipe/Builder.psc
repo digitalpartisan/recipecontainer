@@ -24,7 +24,7 @@ Function goToBuilt()
 	GoToState(sStateBuilt)
 EndFunction
 
-Bool Function getHasRun() ; legacy ; artifact required to determine if an in-upgrade builder has run so that it can be put into the appropriate state
+Bool Function getHasRun() ; legacy artifact required to determine if an in-upgrade builder has run so that it can be put into the appropriate state
 	return bHasRun
 EndFunction
 
