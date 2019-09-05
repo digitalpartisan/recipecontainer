@@ -2,7 +2,7 @@ Scriptname RecipeContainer:Logic:Local extends RecipeContainer:Logic
 
 Import RecipeContainer:Utility:Processing
 
-Float Property CycleHours = 3.0 Auto Const
+Float Property CycleHours = 1.0 Auto Const
 RecipeContainer:Recipe:Builder[] Property MyBuilders Auto Const Mandatory
 RecipeContainer:Logic:ProcessingData Property ProcessingData Auto Const Mandatory
 RecipeContainer:Recipe:Builder:List Property BuilderList Auto Const Mandatory
