@@ -7,15 +7,15 @@ String[] Function getTags() Global
 EndFunction
 
 Bool Function log(String sMessage) Global
-	return Jiffy:Loggout.log(RecipeContainer:Logger.getName(), sMessage, getTags())
+	return RecipeContainer:Logger.log(sMessage, getTags())
 EndFunction
 
 Bool Function warn(String sMessage) Global
-	return Jiffy:Loggout.warn(RecipeContainer:Logger.getName(), sMessage, getTags())
+	return RecipeContainer:Logger.warn(sMessage, getTags())
 EndFunction
 
 Bool Function error(String sMessage) Global
-	return Jiffy:Loggout.error(RecipeContainer:Logger.getName(), sMessage, getTags())
+	return RecipeContainer:Logger.error(sMessage, getTags())
 EndFunction
 
 Bool Function noRecipes(RecipeContainer:Recipe:Builder record) Global

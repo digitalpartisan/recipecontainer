@@ -1,6 +1,6 @@
-Scriptname RecipeContainer:ChroniclePackageBehavior extends Chronicle:Package:CustomBehavior
+Scriptname RecipeContainer:ChroniclePackage:ContainerBehavior extends Chronicle:Package:CustomBehavior
 
-RecipeContainer:Logic[] Property Containers = None Auto Const
+RecipeContainer:Logic[] Property Containers Auto Const Mandatory
 
 Function startContainers()
 	RecipeContainer:Logic.startBulk(Containers)

@@ -127,3 +127,17 @@ State Built
 		return true
 	EndFunction
 EndState
+
+Function updateBulk(RecipeContainer:Recipe:Builder[] builders) Global
+	if (!builders || !builders.Length)
+		return
+	endif
+	
+	Int iCounter = 0
+	while (iCounter < builders.Length)
+		if (builders[iCounter])
+			builders[iCounter].update()
+		endif
+		iCounter += 1
+	endWhile
+EndFunction
