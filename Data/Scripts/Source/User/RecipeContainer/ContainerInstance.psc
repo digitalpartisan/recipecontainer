@@ -40,14 +40,6 @@ Function restartCycle()
 	requestNextCycle()
 EndFunction
 
-Function process()
-	
-EndFunction
-
-Function useProcessPatterns(ProcessPattern[] patterns)
-
-EndFunction
-
 Function examineState()
 {This is the mechanism by which the container instance goes from a passive state to an actively monitored state should it be appropriate.}
 	Bool bWaiting = GetState() == sStateWaiting
@@ -95,6 +87,10 @@ Function sendProcessedEvent(Bool bProcessed = true)
 	SendCustomEvent("Processed", kArgs)
 EndFunction
 
+Function processPatterns(ProcessPattern[] patterns)
+
+EndFunction
+
 Auto State Waiting
 	Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemReference, ObjectReference akSourceContainer)
 	{This entire script is designed to prevent requesting timer events and running through a container's contents against the container type's recipe list unless there's somethign to process.  When something is added to the container, reconsider whether or not processing is appropriate, but only if a processing cycle is not already in effect.}
@@ -110,7 +106,7 @@ State Processing
 	Event OnTimerGameTime(Int aiTimerID)
 	{Event observer for timer updates from the game engine.  See requestNextCycle() and cancelThisCycle().  Note that this behavior only occurs in this state, so that timer events received in another state will just go away.  This is the desired behavior.}
 		if (ProcessingTimerID == aiTimerID)
-			process()
+			ContainerType.processContainerInstance(self)
 		endif
 	EndEvent
 	
@@ -123,12 +119,8 @@ State Processing
 		endif
 	EndFunction
 	
-	Function useProcessPatterns(ProcessPattern[] patterns)
-		
-	EndFunction
-	
-	Function process()
-		ContainerType.processContainerInstance(self)
+	Function processPatterns(ProcessPattern[] patterns)
+		processReference(self, patterns)
 		requestNextCycle()
 	EndFunction
 EndState

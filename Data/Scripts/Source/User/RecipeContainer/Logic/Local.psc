@@ -16,13 +16,7 @@ Bool Function canProcessHelper(RecipeContainer:ContainerInstance akContainerRef)
 EndFunction
 
 Function processHelper(RecipeContainer:ContainerInstance akContainerRef)
-	if (canProcessContainerInstance(akContainerRef))
-		processReference(akContainerRef, ProcessingData.getPatternsForContainerInstance(akContainerRef))
-	endif
-EndFunction
-
-Function rebuildRecipesHelper()
-	ProcessingData.rebuild(BuilderList)
+	ProcessingData.processContainerInstance(akContainerRef)
 EndFunction
 
 Function cleanHelper()
@@ -39,26 +33,26 @@ Function removeBuilder(RecipeContainer:Recipe:Builder builder)
 EndFunction
 
 Function readyHelper()
+	ProcessingData.Start()
 	RegisterForCustomEvent(BuilderList, "RebuildRequired")
 	
-	if (!MyBuilders)
-		return
+	if (MyBuilders)
+		Int iCounter = 0
+		while (iCounter < MyBuilders.Length)
+			addBuilder(MyBuilders[iCounter])
+			iCounter += 1
+		endWhile
 	endif
-	
-	Int iCounter = 0
-	while (iCounter < MyBuilders.Length)
-		addBuilder(MyBuilders[iCounter])
-		iCounter += 1
-	endWhile
 EndFunction
 
 Function shutdownHelper()
 	UnregisterForCustomEvent(BuilderList, "RebuildRequired")
+	ProcessingData.Stop()
 	BuilderList.clear()
 EndFunction
 
 Event RecipeContainer:Recipe:Builder:List.RebuildRequired(RecipeContainer:Recipe:Builder:List akSender, Var[] akArgs)
 	if (BuilderList == akSender)
-		rebuildProcessingData()
+		ProcessingData.update(BuilderList)
 	endif
 EndEvent
