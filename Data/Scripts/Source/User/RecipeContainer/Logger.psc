@@ -57,3 +57,7 @@ EndFunction
 Bool Function logBrewingRecipeConversion(DialogueDrinkingBuddyScript:BrewingRecipe oldRecipe, RecipeContainer:Utility:Recipe:SimpleRecipe newRecipe) Global
 	return log("converted " + oldRecipe + " to " + newRecipe)
 EndFunction
+
+Bool Function logCouldNotCreateSimpleRecipe(Form unprocessed, Form processed) Global
+	return error("could not create new simple recipe with input " + unprocessed + " " + processed)
+EndFunction

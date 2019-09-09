@@ -9,6 +9,7 @@ EndStruct
 
 SimpleRecipe Function create(Form unprocessedVariant, Form processedVariant) Global
 	if (!unprocessedVariant || !processedVariant)
+		RecipeContainer:Logger.logCouldNotCreateSimpleRecipe(unprocessedVariant, processedVariant)
 		return None
 	endif
 	
@@ -25,7 +26,7 @@ SimpleRecipe Function createFromBrewingRecipe(BrewingRecipe recipe) Global
 	endif
 	
 	SimpleRecipe converted = create(recipe.WarmDrinkVariant, recipe.ColdDrinkVariant)
-	;RecipeContainer:Logger.logBrewingRecipeConversion(recipe, converted)
+	RecipeContainer:Logger.logBrewingRecipeConversion(recipe, converted)
 	return converted
 EndFunction
 

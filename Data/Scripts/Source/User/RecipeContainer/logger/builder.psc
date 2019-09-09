@@ -27,5 +27,5 @@ Bool Function invalidRecipe(RecipeContainer:Recipe:Builder record, Int iIndex, R
 EndFunction
 
 Bool Function invalidSimpleRecipe(RecipeContainer:Recipe:Builder record, Int iIndex, RecipeContainer:Utility:Recipe:SimpleRecipe simple) Global
-	return error(record + " build an invalid simple recipe at index " + iIndex + " with value " + simple)
+	return error(record + " built an invalid simple recipe at index " + iIndex + " with value " + simple)
 EndFunction

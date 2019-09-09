@@ -116,11 +116,9 @@ Function cleanBulk(RecipeContainer:Logic[] containerTypes) Global
 	endif
 	
 	Int iCounter = 0
-	RecipeContainer:Logic currentType = None
 	while (iCounter < containerTypes.Length)
-		currentType = containerTypes[iCounter]
-		if (currentType)
-			currentType.clean()
+		if (containerTypes[iCounter])
+			containerTypes[iCounter].clean()
 		endif
 		
 		iCounter += 1
@@ -133,11 +131,9 @@ Function startBulk(RecipeContainer:Logic[] containerTypes) Global
 	endif
 	
 	Int iCounter = 0
-	RecipeContainer:Logic currentType = None
 	while (iCounter < containerTypes.Length)
-		currentType = containerTypes[iCounter]
-		if (currentType)
-			currentType.Start()
+		if (containerTypes[iCounter])
+			containerTypes[iCounter].Start()
 		endif
 		
 		iCounter += 1
@@ -150,11 +146,9 @@ Function stopBulk(RecipeContainer:Logic[] containerTypes) Global
 	endif
 	
 	Int iCounter = 0
-	RecipeContainer:Logic currentType = None
 	while (iCounter < containerTypes.Length)
-		currentType = containerTypes[iCounter]
-		if (currentType)
-			currentType.Stop()
+		if (containerTypes[iCounter])
+			containerTypes[iCounter].Stop()
 		endif
 		
 		iCounter += 1

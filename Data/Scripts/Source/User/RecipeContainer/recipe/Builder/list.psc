@@ -30,9 +30,13 @@ RecipeContainer:Recipe:Builder[] Function getBuilderData()
 	return getData() as RecipeContainer:Recipe:Builder[]
 EndFunction
 
+Function updateBuilders()
+	RecipeContainer:Recipe:Builder.updateBulk(getBuilderData())
+EndFunction
+
 Bool Function validate(Var avItem)
 	RecipeContainer:Recipe:Builder builder = avItem as RecipeContainer:Recipe:Builder
-	return (builder && builder.validateForCleaning())
+	return (builder && builder.validateData())
 EndFunction
 
 Bool Function add(Var avItem)
@@ -66,4 +70,19 @@ Function clear()
 	endWhile
 	
 	parent.clear()
+EndFunction
+
+Function updateBuildersBulk(RecipeContainer:Recipe:Builder:List[] builderLists) Global
+	if (!builderLists || !builderLists.Length)
+		return
+	endif
+	
+	Int iCounter = 0
+	while (iCounter < builderLists.Length)
+		if (builderLists[iCounter])
+			builderLists[iCounter].updateBuilders()
+		endif
+		
+		iCounter += 1
+	endWhile
 EndFunction

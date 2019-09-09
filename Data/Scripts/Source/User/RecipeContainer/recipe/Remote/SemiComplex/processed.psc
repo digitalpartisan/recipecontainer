@@ -5,5 +5,5 @@ Form Function getUnprocessedForm()
 EndFunction
 
 Form Function getProcessedForm()
-	RecipeContainer:Utility:Remote.loadDigits(Plugin, RemoteDigits)
+	return RecipeContainer:Utility:Remote.loadDigits(Plugin, RemoteDigits)
 EndFunction

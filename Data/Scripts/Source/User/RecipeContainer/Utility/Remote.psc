@@ -4,7 +4,7 @@ Import InjectTec:Utility:HexidecimalLogic
 Import RecipeContainer:Utility:Recipe
 
 Form Function loadDigits(InjectTec:Plugin plugin, DigitSet digits) Global
-	return InjectTec:Plugin.fetchFromDigits(plugin, digits)
+	return plugin.lookupWithDigits(digits)
 EndFunction
 
 SimpleRecipe Function loadRemoteForms(InjectTec:Plugin unprocessedPlugin, DigitSet unprocessedDigits, InjectTec:Plugin processedPlugin, DigitSet processedDigits) Global

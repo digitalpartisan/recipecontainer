@@ -1,4 +1,4 @@
-Scriptname RecipeContainer:ChroniclePackage:BuilderAdd extends Chronicle:Package:Update
+Scriptname RecipeContainer:ChroniclePackage:Update:AddRecipeBuilder extends Chronicle:Package:Update
 
 RecipeContainer:Logic:Local Property ContainerType Auto Const Mandatory
 RecipeContainer:Recipe:Builder[] Property Builders Auto Const Mandatory

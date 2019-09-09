@@ -13,9 +13,9 @@ Group PluginSettings
 EndGroup
 
 Form Function getUnprocessedForm()
-	RecipeContainer:Utility:Remote.loadDigits(UnprocessedPlugin, UnprocessedDigits)
+	return RecipeContainer:Utility:Remote.loadDigits(UnprocessedPlugin, UnprocessedDigits)
 EndFunction
 
 Form Function getProcessedForm()
-	RecipeContainer:Utility:Remote.loadDigits(ProcessedPlugin, ProcessedDigits)
+	return RecipeContainer:Utility:Remote.loadDigits(ProcessedPlugin, ProcessedDigits)
 EndFunction
