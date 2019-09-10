@@ -35,8 +35,7 @@ Function updateBuilders()
 EndFunction
 
 Bool Function validate(Var avItem)
-	RecipeContainer:Recipe:Builder builder = avItem as RecipeContainer:Recipe:Builder
-	return (builder && builder.validateData())
+	return (avItem as RecipeContainer:Recipe:Builder) ; this doesn't need a validateData() call because the detailed state logic in a cross-plugin integrator will shut itself down if some data becomes bad
 EndFunction
 
 Bool Function add(Var avItem)

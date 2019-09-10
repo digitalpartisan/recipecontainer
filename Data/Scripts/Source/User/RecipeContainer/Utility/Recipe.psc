@@ -25,9 +25,7 @@ SimpleRecipe Function createFromBrewingRecipe(BrewingRecipe recipe) Global
 		return None
 	endif
 	
-	SimpleRecipe converted = create(recipe.WarmDrinkVariant, recipe.ColdDrinkVariant)
-	RecipeContainer:Logger.logBrewingRecipeConversion(recipe, converted)
-	return converted
+	return create(recipe.WarmDrinkVariant, recipe.ColdDrinkVariant)
 EndFunction
 
 SimpleRecipe[] Function createFromBulkBrewingRecipes(BrewingRecipe[] recipes) Global

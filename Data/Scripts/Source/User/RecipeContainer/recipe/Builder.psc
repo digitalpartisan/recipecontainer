@@ -14,7 +14,7 @@ Function goToBuilt()
 EndFunction
 
 Bool Function validate(Var avItem)
-	return validate(avItem as SimpleRecipe)
+	return false
 EndFunction
 
 Bool Function clean()
@@ -35,10 +35,6 @@ Auto State Waiting
 	Event OnQuestInit()
 		goToBuilt()
 	EndEvent
-	
-	Bool Function validate(Var avItem)
-		return false
-	EndFunction
 	
 	Function populate()
 		
@@ -63,7 +59,7 @@ State Built
 	EndEvent
 	
 	Bool Function validate(Var avItem)
-		return validate(avItem as SimpleRecipe)
+		return RecipeContainer:Utility:Recipe.validate(avItem as SimpleRecipe) ; don't call this class' validate() method or else its always comes back false because a boolean is not a SimpleRecipe
 	EndFunction
 	
 	SimpleRecipe[] Function getRecipes()
