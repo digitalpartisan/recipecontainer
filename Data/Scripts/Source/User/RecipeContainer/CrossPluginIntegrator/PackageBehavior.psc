@@ -1,6 +1,6 @@
-Scriptname RecipeContainer:ChroniclePackage:Behavior:CrossPluginIntegrator extends chronicle:package:custombehavior
+Scriptname RecipeContainer:CrossPluginIntegrator:PackageBehavior extends Chronicle:Package:CustomBehavior
 
-RecipeContainer:CrossPluginIntegrator[] Property Integrators = None Auto Const
+RecipeContainer:CrossPluginIntegrator[] Property Integrators Auto Const Mandatory
 
 Bool Function installBehavior()
 	RecipeContainer:CrossPluginIntegrator.stateCheckBulk(Integrators)

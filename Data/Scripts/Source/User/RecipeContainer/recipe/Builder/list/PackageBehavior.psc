@@ -1,4 +1,4 @@
-Scriptname RecipeContainer:ChroniclePackage:Behavior:RecipeBuilderListUpdate extends Chronicle:Package:CustomBehavior
+Scriptname RecipeContainer:Recipe:Builder:List:PackageBehavior extends Chronicle:Package:CustomBehavior
 
 RecipeContainer:Recipe:Builder:List[] Property BuilderLists Auto Const Mandatory
 

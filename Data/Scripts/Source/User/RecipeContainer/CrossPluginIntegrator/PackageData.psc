@@ -1,4 +1,4 @@
-Scriptname RecipeContainer:ChroniclePackage:Data extends Chronicle:Package:CustomData
+Scriptname RecipeContainer:CrossPluginIntegrator:PackageData extends Chronicle:Package:CustomData
 
 RecipeContainer:ChroniclePackage:Behavior:CrossPluginIntegrator Property IntegratorBehavior = None Auto Const
 

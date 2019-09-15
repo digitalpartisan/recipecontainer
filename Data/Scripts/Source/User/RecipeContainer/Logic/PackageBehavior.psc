@@ -1,4 +1,4 @@
-Scriptname RecipeContainer:ChroniclePackage:Behavior:Container extends Chronicle:Package:CustomBehavior
+Scriptname RecipeContainer:Logic:PackageBehavior extends Chronicle:Package:CustomBehavior
 
 RecipeContainer:Logic[] Property Containers Auto Const Mandatory
 
