@@ -3,16 +3,16 @@ Scriptname RecipeContainer:CrossPluginIntegrator:PackageBehavior extends Chronic
 RecipeContainer:CrossPluginIntegrator[] Property Integrators Auto Const Mandatory
 
 Bool Function installBehavior()
-	RecipeContainer:CrossPluginIntegrator.stateCheckBulk(Integrators)
+	InjectTec:Integrator.stateCheckBulk(Integrators as InjectTec:Integrator[])
 	return true
 EndFunction
 
 Bool Function postloadBehavior()
-	RecipeContainer:CrossPluginIntegrator.stateCheckBulk(Integrators)
+	InjectTec:Integrator.stateCheckBulk(Integrators as InjectTec:Integrator[])
 	return true
 EndFunction
 
 Bool Function uninstallBehavior()
-	RecipeContainer:CrossPluginIntegrator.stopBulk(Integrators)
+	InjectTec:Integrator.stopBulk(Integrators as InjectTec:Integrator[])
 	return true
 EndFunction

@@ -36,11 +36,15 @@ Function updateState()
 	bIsValid = true
 	bHasRun = integrator.hasRun()
 	bShouldStart = integrator.shouldStart()
-	bShouldStop = integrator.shouldStop()
+	bShouldStop = integrator.shouldUnrun()
 EndFunction
 
 Function rerun(ObjectReference akTerminalRef)
-	RecipeContainer:CrossPluginIntegrator integrator = getIntegrator()
+    if (!isValid())
+        return
+    endif
+
+    RecipeContainer:CrossPluginIntegrator integrator = getIntegrator()
 
 	integrator.Stop()
 	integrator.Start()
@@ -50,12 +54,6 @@ EndFunction
 
 Function teardown(ObjectReference akTerminalRef)
 	getIntegrator().Stop()
-	updateState()
-	draw(akTerminalRef)
-EndFunction
-
-Function forceInjections(ObjectReference akTerminalRef)
-	getIntegrator().handleInjections(true)
 	updateState()
 	draw(akTerminalRef)
 EndFunction
