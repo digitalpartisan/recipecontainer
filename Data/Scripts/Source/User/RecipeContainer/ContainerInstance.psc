@@ -4,8 +4,6 @@ This script handles the reference-specific state and timer events and only these
 from the game engine unless there are contents which could be processed in the cycle to be requested.  Doing so means that there are fewer stresses put on the game than would otherwise be the case.
 This involves some slight overhead involving multiple calls to instanceNeedsProcessing() on the container type object, but the bulk of these extraneous calls are expected to occur once before putting the script into the Waiting state.}
 
-Import RecipeContainer:Utility:Processing
-
 CustomEvent Processed
 
 RecipeContainer:Logic Property ContainerType Auto Const Mandatory
@@ -87,7 +85,7 @@ Function sendProcessedEvent(Bool bProcessed = true)
 	SendCustomEvent("Processed", kArgs)
 EndFunction
 
-Function processPatterns(ProcessPattern[] patterns)
+Function processBuilders(RecipeContainer:Recipe:Builder:List builderList)
 
 EndFunction
 
@@ -119,8 +117,9 @@ State Processing
 		endif
 	EndFunction
 	
-	Function processPatterns(ProcessPattern[] patterns)
-		processReference(self, patterns)
+	Function processBuilders(RecipeContainer:Recipe:Builder:List builderList)
+		builderList.processContainerInstance(self)
+		sendProcessedEvent(isProcessing())
 		requestNextCycle()
 	EndFunction
 EndState

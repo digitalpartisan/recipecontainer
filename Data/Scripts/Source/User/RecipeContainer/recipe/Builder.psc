@@ -25,6 +25,14 @@ SimpleRecipe[] Function getRecipes()
 	return None ; so that this can be overridden in states on this script without compiler errors
 EndFunction
 
+Bool Function isRelevantToContainer(RecipeContainer:ContainerInstance containerInstance)
+	return false
+EndFunction
+
+Function processContainer(RecipeContainer:ContainerInstance containerInstance)
+	
+EndFunction
+
 Auto State Waiting
 	Event OnBeginState(String asOldState)
 		if (sStateBuilt == asOldState)
@@ -64,6 +72,39 @@ State Built
 	
 	SimpleRecipe[] Function getRecipes()
 		return getData() as SimpleRecipe[]
+	EndFunction
+	
+	Bool Function isRelevantToContainer(RecipeContainer:ContainerInstance containerInstance)
+		SimpleRecipe[] recipes = getRecipes()
+		if (!recipes || !recipes.Length || !containerInstance)
+			return false
+		endif
+		
+		SimpleRecipe recipe = None
+		Int iCounter = 0
+		while (iCounter < recipes.Length)
+			recipe = rigForContainer(recipes[iCounter], containerInstance)
+			if (recipe && containerInstance.GetItemCount(recipe.unprocessed))
+				return true
+			endif
+			
+			iCounter += 1
+		endWhile
+		
+		return false
+	EndFunction
+	
+	Function processContainer(RecipeContainer:ContainerInstance containerInstance)
+		SimpleRecipe[] recipes = getRecipes()
+		if (!recipes || !recipes.Length || !containerInstance)
+			return
+		endif
+		
+		Int iCounter = 0
+		while (iCounter < recipes.Length)
+			process(recipes[iCounter], containerInstance)
+			iCounter += 1
+		endWhile
 	EndFunction
 EndState
 

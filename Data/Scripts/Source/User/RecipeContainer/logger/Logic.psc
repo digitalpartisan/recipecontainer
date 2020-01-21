@@ -29,11 +29,3 @@ EndFunction
 Bool Function logRemoteNotFound(RecipeContainer:Logic:Remote remoteContainer) Global
 	return log(remoteContainer + " was not found and cannot operate")
 EndFunction
-
-Bool Function logCannotProcessReference(RecipeContainer:Logic:ProcessingData:Set processingSet) Global
-	return error(processingSet + " was given a none reference to process")
-EndFunction
-
-Bool Function logNoRelevantContents(RecipeContainer:Logic:ProcessingData:Set processingSet, RecipeContainer:ContainerInstance containerRef) Global
-	return log(processingSet + " found that " + containerRef + " contains no relevant contents out of " + Jiffy:Utility:FormList.toArray(processingSet.getSearchForms()))
-EndFunction

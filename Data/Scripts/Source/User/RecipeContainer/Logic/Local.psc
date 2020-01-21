@@ -1,7 +1,5 @@
 Scriptname RecipeContainer:Logic:Local extends RecipeContainer:Logic
 
-Import RecipeContainer:Utility:Processing
-
 Float Property CycleHours = 1.0 Auto Const
 RecipeContainer:Recipe:Builder[] Property MyBuilders Auto Const Mandatory
 RecipeContainer:Logic:ProcessingData Property ProcessingData Auto Const Mandatory
@@ -34,8 +32,7 @@ EndFunction
 
 Function readyHelper()
 	ProcessingData.Start()
-	RegisterForCustomEvent(BuilderList, "RebuildRequired")
-	
+
 	if (MyBuilders)
 		Int iCounter = 0
 		while (iCounter < MyBuilders.Length)
@@ -46,13 +43,6 @@ Function readyHelper()
 EndFunction
 
 Function shutdownHelper()
-	UnregisterForCustomEvent(BuilderList, "RebuildRequired")
 	ProcessingData.Stop()
 	BuilderList.clear()
 EndFunction
-
-Event RecipeContainer:Recipe:Builder:List.RebuildRequired(RecipeContainer:Recipe:Builder:List akSender, Var[] akArgs)
-	if (BuilderList == akSender)
-		ProcessingData.update(BuilderList)
-	endif
-EndEvent

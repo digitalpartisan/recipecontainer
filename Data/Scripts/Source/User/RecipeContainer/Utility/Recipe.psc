@@ -63,6 +63,46 @@ Bool Function validate(SimpleRecipe recipe) Global
 	return recipe && recipe.unprocessed && recipe.processed
 EndFunction
 
+SimpleRecipe Function reverse(SimpleRecipe recipe) Global
+	if (!validate(recipe))
+		return None
+	endif
+	
+	SimpleRecipe reversal = new SimpleRecipe
+	reversal.unprocessed = recipe.processed
+	reversal.processed = recipe.unprocessed
+	
+	return reversal
+EndFunction
+
+SimpleRecipe Function rigForContainer(SimpleRecipe recipe, RecipeContainer:ContainerInstance containerRef) Global
+	if (!recipe || !containerRef)
+		return None
+	endif
+
+	if (containerRef.isProcessing())
+		return recipe
+	else
+		return reverse(recipe)
+	endif
+EndFunction
+
+Function process(SimpleRecipe recipe, RecipeContainer:ContainerInstance containerRef) Global
+	if (!recipe || !validate(recipe) || !containerRef)
+		return None
+	endif
+	
+	SimpleRecipe rigged = rigForContainer(recipe, containerRef)
+	Int iCount = containerRef.GetItemCount(rigged.unprocessed)
+	if (!iCount)
+		return
+	endif
+	
+	RecipeContainer:Logger.logReplacement(containerRef, rigged.unprocessed, rigged.processed, iCount)
+	containerRef.RemoveItem(rigged.unprocessed, iCount, true)
+	containerRef.AddItem(rigged.processed, iCount, true)
+EndFunction
+
 Bool Function clean(SimpleRecipe[] recipes) Global
 	Int iCounter = 0
 	Bool bResult = false
