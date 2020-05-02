@@ -2,10 +2,27 @@ Scriptname RecipeContainer:Recipe:Builder:Definitions extends RecipeContainer:Re
 
 Import RecipeContainer:Utility:Recipe
 
-RecipeContainer:Recipe[] Property RecipesToBuild Auto Const Mandatory
+RecipeContainer:Recipe[] Property RecipesToBuild Auto Const
+{Standard way of listing the recipe definitions}
+FormList Property RecipeList Auto Const
+{Using a FormList to list the recipe definitions may be preferrable if there are many of them or they change between updates on a regular basis.}
+
+RecipeContainer:Recipe[] Function getDefinitions()
+	if (RecipesToBuild)
+		return RecipesToBuild
+	endif
+	
+	if (RecipeList)
+		return Jiffy:Utility:FormList.toArray(RecipeList) as RecipeContainer:Recipe[]
+	endif
+	
+	return None
+EndFunction
 
 Var[] Function populateBehavior()
-	if (!RecipesToBuild || !RecipesToBuild.Length)
+	RecipeContainer:Recipe[] definitionList = getDefinitions()
+
+	if (!definitionList || !definitionList.Length)
 		RecipeContainer:Logger:Builder.noRecipes(self)
 		return None
 	endif
@@ -16,8 +33,8 @@ Var[] Function populateBehavior()
 	RecipeContainer:Recipe recipe = None
 	SimpleRecipe newRecipe = None
 	
-	while (iCounter < RecipesToBuild.Length)
-		recipe = RecipesToBuild[iCounter]
+	while (iCounter < definitionList.Length)
+		recipe = definitionList[iCounter]
 		if (!recipe)
 			RecipeContainer:Logger:Builder.invalidRecipe(self, iCounter, recipe)
 			return None
