@@ -23,7 +23,7 @@ Bool Function logBehaviorUndefined(ScriptObject object, String sFunctionName) Gl
 EndFunction
 
 Bool Function logCycle(RecipeContainer:ContainerInstance akContainerRef) Global
-	return log(akContainerRef + " processing, processing: " + akContainerRef.isProcessing())
+	return log(akContainerRef + " processing, forward processing: " + akContainerRef.isForwardProcessing())
 EndFunction
 
 Bool Function logReplacement(ObjectReference akContainerRef, Form apSearch, Form apReplace, Int iCount) Global

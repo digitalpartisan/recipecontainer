@@ -2,7 +2,7 @@ Scriptname RecipeContainer:Logger:ContainerInstance Hidden Const DebugOnly
 
 String[] Function getTags() Global
 	String[] tags = new String[1]
-	tags[0] = "Container Instace"
+	tags[0] = "Container Instance"
 	return tags
 EndFunction
 
@@ -31,9 +31,17 @@ Bool Function needsProcessing(RecipeContainer:ContainerInstance object, Bool bNe
 EndFunction
 
 Bool Function powerEvent(RecipeContainer:ContainerInstance object) Global
-	return log(object + " observed a power event, powered on: " + object.IsPowered() + " and is processing: " + object.isProcessing())
+	return log(object + " observed a power event, powered on: " + object.IsPowered() + " and is forward processing: " + object.isForwardProcessing())
 EndFunction
 
 Bool Function stateEvent(RecipeContainer:ContainerInstance object) Global
 	return log(object + " has entered state: " + object.GetState())
+EndFunction
+
+Bool Function logStartTimer(RecipeContainer:ContainerInstance object) Global
+	return log(object + " has started its timer")
+EndFunction
+
+Bool Function logTimerEvent(RecipeContainer:ContainerInstance object) Global
+	return log(object + " has received a timer event")
 EndFunction

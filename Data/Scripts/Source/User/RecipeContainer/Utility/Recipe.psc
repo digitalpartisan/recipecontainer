@@ -80,7 +80,7 @@ SimpleRecipe Function rigForContainer(SimpleRecipe recipe, RecipeContainer:Conta
 		return None
 	endif
 
-	if (containerRef.isProcessing())
+	if (containerRef.isForwardProcessing())
 		return recipe
 	else
 		return reverse(recipe)
