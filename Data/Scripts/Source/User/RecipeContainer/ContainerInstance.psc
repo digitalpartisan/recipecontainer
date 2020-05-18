@@ -92,6 +92,7 @@ EndFunction
 
 Event OnInit()
 	RecipeContainer:Logger:ContainerInstance.initialization(self)
+	AddInventoryEventFilter(None)
 	examineState()
 EndEvent
 
@@ -113,13 +114,13 @@ Event OnPowerOff()
 EndEvent
 
 Auto State Waiting
-	Event OnClose(ObjectReference akActionRef)
-		(Game.GetPlayer() == akActionRef) && examineState() ; doing this only in a waiting state means that the item replacements made during processing will not trigger another examineState() call since it will be called at the end of processing
-	EndEvent
-	
 	Bool Function isWaiting()
 		return true
 	EndFunction
+	
+	Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemReference, ObjectReference akSourceContainer)
+		examineState() ; doing this in the waiting state means that the first item added that causes a processing cycle is the only one to trigger the examination check, thus limiting the number of times that happens
+	EndEvent
 EndState
 
 State Processing
