@@ -8,8 +8,6 @@ CustomEvent Processed
 
 RecipeContainer:Logic Property ContainerType Auto Const Mandatory
 {What sort of container this is.  See the RecipeContainer:Logic script for details.}
-Bool Property PowerRequired = true Auto Const
-{Setting this value to false will cause the container to forward process regardless of whether or not it has power.  This is most appropriate for containers placed in a cell which is not part of a workshop and/or container types that would not reverse process in any scenario.}
 Int Property ProcessingTimerID = 1 Auto Const
 {Used for tracking the process cycles on this script.}
 
@@ -24,6 +22,14 @@ Function goToWaiting()
 	GoToState(sStateWaiting)
 EndFunction
 
+Bool Function requiresPower()
+	return GetValue(Game.GetFormFromFile(0x00000330, "Fallout4.esm") as ActorValue) > 0
+EndFunction
+
+Bool Function meetsPowerRequirements()
+	return !requiresPower() || IsPowered()
+EndFunction
+
 Bool Function isProcessing()
 	return false
 EndFunction
@@ -36,12 +42,11 @@ RecipeContainer:Logic Function getContainerType()
 	return ContainerType
 EndFunction
 
-Bool Function isForwardProcessing()
-{A container is said to cool its contents if it either does not require power or if it requires and has power.  Otherwise (i.e. if it lacks required power) it is in a warming cycle.}
-	return !PowerRequired || IsPowered()
-EndFunction
-
 Bool Function needsProcessing()
+	if (!meetsPowerRequirements())
+		return false
+	endif
+	
 	Bool bResult = getContainerType().canProcessContainerInstance(self)
 	RecipeContainer:Logger:ContainerInstance.needsProcessing(self, bResult)
 	return bResult
@@ -72,6 +77,19 @@ Function examineState()
 	endif
 EndFunction
 
+Function requestNextCycle()
+	
+EndFunction
+
+Function sendProcessedEvent()
+	
+EndFunction
+
+Function postProcessing()
+	sendProcessedEvent()
+	requestNextCycle()
+EndFunction
+
 Event OnInit()
 	RecipeContainer:Logger:ContainerInstance.initialization(self)
 	examineState()
@@ -93,20 +111,6 @@ Event OnPowerOff()
 	RecipeContainer:Logger:ContainerInstance.powerEvent(self)
 	examineState()
 EndEvent
-
-Function requestNextCycle()
-{Required to be defined here so that it exists as empty in every state unless specifically defined therein.}
-EndFunction
-
-Function sendProcessedEvent(Bool bProcessed = true)
-	Var[] kArgs = new Var[1]
-	kArgs[0] = bProcessed
-	SendCustomEvent("Processed", kArgs)
-EndFunction
-
-Function processBuilders(RecipeContainer:Recipe:Builder:List builderList)
-
-EndFunction
 
 Auto State Waiting
 	Event OnClose(ObjectReference akActionRef)
@@ -131,13 +135,13 @@ State Processing
 	{Event observer for timer updates from the game engine.  See requestNextCycle() and cancelThisCycle().  Note that this behavior only occurs in this state, so that timer events received in another state will just go away.  This is the desired behavior.}
 		if (ProcessingTimerID == aiTimerID)
 			RecipeContainer:Logger:ContainerInstance.logTimerEvent(self)
-			ContainerType.processContainerInstance(self)
+			getContainerType().processContainerInstance(self)
 		endif
 	EndEvent
 	
 	Function requestNextCycle()
 	{When the container is anticipates the need to process contents, verify that doing so is appropriate at this time and if so, request a timer event for the next processing round.}
-		if (ContainerType.canProcessContainerInstance(self))
+		if (getContainerType().canProcessContainerInstance(self))
 			RecipeContainer:Logger:ContainerInstance.logStartTimer(self)
 			StartTimerGameTime(getContainerType().getCycleHours(), ProcessingTimerID)
 		else
@@ -145,9 +149,7 @@ State Processing
 		endif
 	EndFunction
 	
-	Function processBuilders(RecipeContainer:Recipe:Builder:List builderList)
-		builderList.processContainerInstance(self)
-		sendProcessedEvent(isForwardProcessing())
-		requestNextCycle()
+	Function sendProcessedEvent()
+		SendCustomEvent("Processed")
 	EndFunction
 EndState

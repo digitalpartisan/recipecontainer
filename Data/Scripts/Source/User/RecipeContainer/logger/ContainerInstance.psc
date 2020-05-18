@@ -31,7 +31,7 @@ Bool Function needsProcessing(RecipeContainer:ContainerInstance object, Bool bNe
 EndFunction
 
 Bool Function powerEvent(RecipeContainer:ContainerInstance object) Global
-	return log(object + " observed a power event, powered on: " + object.IsPowered() + " and is forward processing: " + object.isForwardProcessing())
+	return log(object + " observed a power event, powered on: " + object.IsPowered())
 EndFunction
 
 Bool Function stateEvent(RecipeContainer:ContainerInstance object) Global

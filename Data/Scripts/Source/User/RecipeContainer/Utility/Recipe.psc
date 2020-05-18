@@ -63,44 +63,19 @@ Bool Function validate(SimpleRecipe recipe) Global
 	return recipe && recipe.unprocessed && recipe.processed
 EndFunction
 
-SimpleRecipe Function reverse(SimpleRecipe recipe) Global
-	if (!validate(recipe))
-		return None
-	endif
-	
-	SimpleRecipe reversal = new SimpleRecipe
-	reversal.unprocessed = recipe.processed
-	reversal.processed = recipe.unprocessed
-	
-	return reversal
-EndFunction
-
-SimpleRecipe Function rigForContainer(SimpleRecipe recipe, RecipeContainer:ContainerInstance containerRef) Global
-	if (!recipe || !containerRef)
-		return None
-	endif
-
-	if (containerRef.isForwardProcessing())
-		return recipe
-	else
-		return reverse(recipe)
-	endif
-EndFunction
-
 Function process(SimpleRecipe recipe, RecipeContainer:ContainerInstance containerRef) Global
 	if (!recipe || !validate(recipe) || !containerRef)
 		return None
 	endif
 	
-	SimpleRecipe rigged = rigForContainer(recipe, containerRef)
-	Int iCount = containerRef.GetItemCount(rigged.unprocessed)
+	Int iCount = containerRef.GetItemCount(recipe.unprocessed)
 	if (!iCount)
 		return
 	endif
 	
-	RecipeContainer:Logger.logReplacement(containerRef, rigged.unprocessed, rigged.processed, iCount)
-	containerRef.RemoveItem(rigged.unprocessed, iCount, true)
-	containerRef.AddItem(rigged.processed, iCount, true)
+	RecipeContainer:Logger.logReplacement(containerRef, recipe.unprocessed, recipe.processed, iCount)
+	containerRef.RemoveItem(recipe.unprocessed, iCount, true)
+	containerRef.AddItem(recipe.processed, iCount, true)
 EndFunction
 
 Bool Function clean(SimpleRecipe[] recipes) Global
@@ -112,7 +87,7 @@ Bool Function clean(SimpleRecipe[] recipes) Global
 			recipes.Remove(iCounter)
 			bResult = true
 		else
-			iCounter += 1 ; because if an item was removed, no increment is required to proceed to it
+			iCounter += 1 ; because if an item was removed, no increment is required to proceed to the next
 		endif
 	endWhile
 	

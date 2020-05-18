@@ -4,10 +4,6 @@ Because of the use of drinking buddy recipes elsewhere in the game, this library
 This decision was made largely because of the volume of existing recipes in the game files already which means this library can make use of them.
 This functionality is here and not handled by the container instance script because doing so centralizes access to recipe options and removes anything not specifically required to determine the state of any particular container, which simplifies the container instance script.}
 
-Import DialogueDrinkingBuddyScript
-
-BrewingRecipe[] Property CustomRecipes Auto
-
 Float Function getCycleHours()
 	return 1
 EndFunction

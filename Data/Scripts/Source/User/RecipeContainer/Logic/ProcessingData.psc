@@ -26,16 +26,24 @@ Function goToShutdown()
 	GoToState(sStateShutdown)
 EndFunction
 
+RecipeContainer:Recipe:Builder:List Function getBuilderList()
+	return BuilderList
+EndFunction
+
+RecipeContainer:ContainerInstance:Queue Function getContainerInstanceQueue()
+	return ContainerInstanceQueue
+EndFunction
+
 Bool Function canProcessContainerInstance(RecipeContainer:ContainerInstance akContainerRef)
-	return BuilderList.isRelevantToContainer(akContainerRef)
+	return getBuilderList().isRelevantToContainer(akContainerRef)
 EndFunction
 
 Bool Function queueContainerInstance(RecipeContainer:ContainerInstance akContainerRef)
-	return canProcessContainerInstance(akContainerRef) && ContainerInstanceQueue.add(akContainerRef)
+	return getContainerInstanceQueue().add(akContainerRef)
 EndFunction
 
 Function processContainerInstance(RecipeContainer:ContainerInstance akContainerRef)
-	BuilderList.processContainerInstance(akContainerRef)
+	getBuilderList().processContainerInstance(akContainerRef)
 EndFunction
 
 Event OnQuestShutdown()
@@ -62,7 +70,7 @@ EndState
 
 State Waiting
 	Event OnBeginState(String asOldState)
-		ContainerInstanceQueue.hasData() && goToProcessing()
+		getContainerInstanceQueue().hasData() && goToProcessing()
 	EndEvent
 	
 	Function processContainerInstance(RecipeContainer:ContainerInstance akContainerRef)
@@ -72,8 +80,8 @@ EndState
 
 State Processing
 	Event OnBeginState(String asOldState)
-		RecipeContainer:ContainerInstance containerRef = ContainerInstanceQueue.pollContainerInstance()
-		containerRef && canProcessContainerInstance(containerRef) && containerRef.processBuilders(BuilderList)
+		RecipeContainer:ContainerInstance containerRef = getContainerInstanceQueue().pollContainerInstance()
+		containerRef && BuilderList.processContainerInstance(containerRef) && containerRef.postProcessing()
 		goToWaiting()
 	EndEvent
 	

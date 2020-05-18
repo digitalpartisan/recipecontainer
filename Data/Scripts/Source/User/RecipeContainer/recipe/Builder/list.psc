@@ -52,7 +52,7 @@ EndFunction
 
 Bool Function isRelevantToContainer(RecipeContainer:ContainerInstance containerRef)
 	RecipeContainer:Recipe:Builder[] builders = getBuilderData()
-	if (!builders || !containerRef)
+	if (!builders || !builders.Length || !containerRef)
 		return false
 	endif
 	

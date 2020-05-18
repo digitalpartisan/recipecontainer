@@ -32,13 +32,8 @@ Function refresh()
 EndFunction
 
 RecipeContainer:Logic:Local Function getRemoteContainerType()
-	if (!remoteContainerType)
-		refresh()
-	endif
-	
-	if (!remoteContainerType)
-		RecipeContainer:Logger:Logic.logRemoteNotFound(self)
-	endif
+	!remoteContainerType && refresh() ; could change the vaule of remoteContainerType
+	!remoteContainerType && RecipeContainer:Logger:Logic.logRemoteNotFound(self)
 	
 	return remoteContainerType
 EndFunction
@@ -63,9 +58,7 @@ EndFunction
 
 Function processHelper(RecipeContainer:ContainerInstance akContainerRef)
 	RecipeContainer:Logic:Local remoteContainer = getRemoteContainerType()
-	if (remoteContainer)
-		remoteContainer.processContainerInstance(akContainerRef)
-	endif
+	remoteContainer && remoteContainer.processContainerInstance(akContainerRef)
 EndFunction
 
 Function readyHelper()

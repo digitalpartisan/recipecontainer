@@ -80,11 +80,9 @@ State Built
 			return false
 		endif
 		
-		SimpleRecipe recipe = None
 		Int iCounter = 0
 		while (iCounter < recipes.Length)
-			recipe = rigForContainer(recipes[iCounter], containerInstance)
-			if (recipe && containerInstance.GetItemCount(recipe.unprocessed))
+			if (recipes[iCounter] && recipes[iCounter].unprocessed && containerInstance.GetItemCount(recipes[iCounter].unprocessed))
 				return true
 			endif
 			
@@ -115,10 +113,7 @@ Function updateBulk(RecipeContainer:Recipe:Builder[] builders) Global
 	
 	Int iCounter = 0
 	while (iCounter < builders.Length)
-		if (builders[iCounter])
-			builders[iCounter].update()
-		endif
-		
+		builders[iCounter] && builders[iCounter].update()
 		iCounter += 1
 	endWhile
 EndFunction

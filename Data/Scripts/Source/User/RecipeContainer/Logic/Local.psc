@@ -5,16 +5,20 @@ RecipeContainer:Recipe:Builder[] Property MyBuilders Auto Const Mandatory
 RecipeContainer:Logic:ProcessingData Property ProcessingData Auto Const Mandatory
 RecipeContainer:Recipe:Builder:List Property BuilderList Auto Const Mandatory
 
+RecipeContainer:Logic:ProcessingData Function getProcessingData()
+	return ProcessingData
+EndFunction
+
 Float Function getCycleHours()
 	return CycleHours
 EndFunction
 
 Bool Function canProcessHelper(RecipeContainer:ContainerInstance akContainerRef)
-	return ProcessingData.canProcessContainerInstance(akContainerRef)
+	return getProcessingData().canProcessContainerInstance(akContainerRef)
 EndFunction
 
 Function processHelper(RecipeContainer:ContainerInstance akContainerRef)
-	ProcessingData.processContainerInstance(akContainerRef)
+	getProcessingData().processContainerInstance(akContainerRef)
 EndFunction
 
 Function cleanHelper()
@@ -31,7 +35,7 @@ Function removeBuilder(RecipeContainer:Recipe:Builder builder)
 EndFunction
 
 Function readyHelper()
-	ProcessingData.Start()
+	getProcessingData().Start()
 
 	if (MyBuilders)
 		Int iCounter = 0
@@ -43,6 +47,6 @@ Function readyHelper()
 EndFunction
 
 Function shutdownHelper()
-	ProcessingData.Stop()
+	getProcessingData().Stop()
 	BuilderList.clear()
 EndFunction
