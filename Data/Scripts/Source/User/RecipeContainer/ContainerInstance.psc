@@ -137,6 +137,7 @@ State Processing
 		if (ProcessingTimerID == aiTimerID)
 			RecipeContainer:Logger:ContainerInstance.logTimerEvent(self)
 			getContainerType().processContainerInstance(self)
+			postProcessing()
 		endif
 	EndEvent
 	
