@@ -68,3 +68,8 @@ EndFunction
 Function shutdownHelper()
 	setRemoteContainerType(None)
 EndFunction
+
+Function dumpToContainer(ObjectReference akTargetRef, Int iAmount = 1)
+	RecipeContainer:Logic:Local remoteContainer = getRemoteContainerType()
+	remoteContainer && remoteContainer.dumpToContainer(akTargetRef, iAmount)
+EndFunction

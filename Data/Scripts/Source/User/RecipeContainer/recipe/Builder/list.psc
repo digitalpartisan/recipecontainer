@@ -50,6 +50,19 @@ Function clear()
 	parent.clear()
 EndFunction
 
+Function dumpToContainer(ObjectReference akTargetRef, Int iAmount = 1)
+	RecipeContainer:Recipe:Builder[] builderSet = getBuilderData()
+	if (!akTargetRef || iAmount < 1 || !builderSet || !builderSet.Length)
+		return
+	endif
+	
+	Int iCounter = 0
+	while (iCounter < builderSet.Length)
+		builderSet[iCounter] && builderSet[iCounter].dumpToContainer(akTargetRef, iAmount)
+		iCounter += 1
+	endWhile
+EndFunction
+
 Bool Function isRelevantToContainer(RecipeContainer:ContainerInstance containerRef)
 	RecipeContainer:Recipe:Builder[] builders = getBuilderData()
 	if (!builders || !builders.Length || !containerRef)

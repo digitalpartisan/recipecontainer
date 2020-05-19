@@ -33,6 +33,19 @@ Function processContainer(RecipeContainer:ContainerInstance containerInstance)
 	
 EndFunction
 
+Function dumpToContainer(ObjectReference akTargetRef, Int iAmount = 1)
+	SimpleRecipe[] recipeSet = getRecipes()
+	if (!akTargetRef || iAmount < 1 || !recipeSet || !recipeSet.Length)
+		return
+	endif
+	
+	Int iCounter = 0
+	while (iCounter < recipeSet.Length)
+		recipeSet[iCounter] && akTargetRef.AddItem(recipeSet[iCounter].unprocessed, iAmount)
+		iCounter += 1
+	endWhile
+EndFunction
+
 Auto State Waiting
 	Event OnBeginState(String asOldState)
 		if (sStateBuilt == asOldState)

@@ -8,14 +8,6 @@ Float Function getCycleHours()
 	return 1
 EndFunction
 
-Function rebuildRecipesHelper()
-	
-EndFunction
-
-Function rebuildProcessingData()
-	
-EndFunction
-
 Bool Function canProcessHelper(RecipeContainer:ContainerInstance akContainerRef)
 	
 EndFunction
@@ -40,32 +32,16 @@ Function clean()
 	
 EndFunction
 
-Function addBuilder(RecipeContainer:Recipe:Builder builder)
-	
-EndFunction
-
-Function removeBuilder(RecipeContainer:Recipe:Builder builder)
-	
-EndFunction
-
-Function listenForRecipeUpdates()
-	
-EndFunction
-
-Function stopListeningForRecipeUpdates()
-
-EndFunction
-
-Function addMyBuilders()
-	
-EndFunction
-
 Function readyHelper()
 
 EndFunction
 
 Function shutdownHelper()
 
+EndFunction
+
+Function dumpToContainer(ObjectReference akTargetRef, Int iAmount = 1)
+	
 EndFunction
 
 Auto State Waiting
@@ -82,10 +58,6 @@ State Ready
 	Event OnQuestShutdown()
 		GoToState("Shutdown")
 	EndEvent
-	
-	Function rebuildProcessingData()
-		rebuildRecipesHelper()
-	EndFunction
 	
 	Bool Function canProcessContainerInstance(RecipeContainer:ContainerInstance akContainerRef)
 		return canProcessHelper(akContainerRef)
