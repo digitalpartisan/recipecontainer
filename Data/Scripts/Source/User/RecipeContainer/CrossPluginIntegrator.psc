@@ -1,4 +1,4 @@
-Scriptname RecipeContainer:CrossPluginIntegrator extends InjectTec:Integrator Hidden Conditional
+Scriptname RecipeContainer:CrossPluginIntegrator extends InjectTec:Integrator:BehaviorOmnibus Hidden Conditional
 
 RecipeContainer:Recipe:Builder Property Builder Auto Const
 
