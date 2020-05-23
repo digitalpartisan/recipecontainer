@@ -1,4 +1,4 @@
-Scriptname RecipeContainer:Logger:CrossPluginIntegrator Hidden Const DebugOnly
+Scriptname RecipeContainer:CrossPluginIntegrator:Logger Hidden Const DebugOnly
 
 String[] Function getTags() Global
 	String[] tags = new String[1]

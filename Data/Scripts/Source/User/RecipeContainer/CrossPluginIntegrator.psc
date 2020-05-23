@@ -8,7 +8,7 @@ EndFunction
 
 RecipeContainer:Logic:Local Function getContainerType()
 {Override this method to implement a functional integrator according to your plugin's needs.}
-	RecipeContainer:Logger:CrossPluginIntegrator.logNoGetContainerTypeImplementation(self)
+	RecipeContainer:CrossPluginIntegrator:Logger.logNoGetContainerTypeImplementation(self)
 	return None
 EndFunction
 
@@ -19,7 +19,7 @@ Bool Function canHandleBuilder()
 
     RecipeContainer:Logic:Local myContainer = getContainerType()
     if (!myContainer)
-        RecipeContainer:Logger:CrossPluginIntegrator.logContainerNotFound(self)
+        RecipeContainer:CrossPluginIntegrator:Logger.logContainerNotFound(self)
         return false
     endif
 

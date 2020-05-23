@@ -48,7 +48,7 @@ Bool Function needsProcessing()
 	endif
 	
 	Bool bResult = getContainerType().canProcessContainerInstance(self)
-	RecipeContainer:Logger:ContainerInstance.needsProcessing(self, bResult)
+	RecipeContainer:ContainerInstance:Logger.needsProcessing(self, bResult)
 	return bResult
 EndFunction
 
@@ -91,25 +91,25 @@ Function postProcessing()
 EndFunction
 
 Event OnInit()
-	RecipeContainer:Logger:ContainerInstance.initialization(self)
+	RecipeContainer:ContainerInstance:Logger.initialization(self)
 	AddInventoryEventFilter(None)
 	examineState()
 EndEvent
 
 Event OnWorkshopObjectDestroyed(ObjectReference akActionRef)
-	RecipeContainer:Logger:ContainerInstance.destruction(self)
+	RecipeContainer:ContainerInstance:Logger.destruction(self)
 	cancelThisCycle() ; there's no reference left to receive event updates - timers or otherwise - do be polite and tell the game engine to disregard any timer that may be in progress.
 EndEvent
 
 Event OnPowerOn(ObjectReference akGenerator)
 {If power is applied, the container was previously warming.  Since it takes a certain number of hours to cool, that update needs to happen that number of hours from this event.}
-	RecipeContainer:Logger:ContainerInstance.powerEvent(self)
+	RecipeContainer:ContainerInstance:Logger.powerEvent(self)
 	examineState()
 EndEvent
 
 Event OnPowerOff()
 {See documentation for the power on event.  Ditto for previously cooling.  So many hours from this event, the next update needs to happen a cycle's worth of hours from now.}
-	RecipeContainer:Logger:ContainerInstance.powerEvent(self)
+	RecipeContainer:ContainerInstance:Logger.powerEvent(self)
 	examineState()
 EndEvent
 
@@ -135,7 +135,7 @@ State Processing
 	Event OnTimerGameTime(Int aiTimerID)
 	{Event observer for timer updates from the game engine.  See requestNextCycle() and cancelThisCycle().  Note that this behavior only occurs in this state, so that timer events received in another state will just go away.  This is the desired behavior.}
 		if (ProcessingTimerID == aiTimerID)
-			RecipeContainer:Logger:ContainerInstance.logTimerEvent(self)
+			RecipeContainer:ContainerInstance:Logger.logTimerEvent(self)
 			getContainerType().processContainerInstance(self)
 			postProcessing()
 		endif
@@ -144,7 +144,7 @@ State Processing
 	Function requestNextCycle()
 	{When the container is anticipates the need to process contents, verify that doing so is appropriate at this time and if so, request a timer event for the next processing round.}
 		if (getContainerType().canProcessContainerInstance(self))
-			RecipeContainer:Logger:ContainerInstance.logStartTimer(self)
+			RecipeContainer:ContainerInstance:Logger.logStartTimer(self)
 			StartTimerGameTime(getContainerType().getCycleHours(), ProcessingTimerID)
 		else
 			goToWaiting()

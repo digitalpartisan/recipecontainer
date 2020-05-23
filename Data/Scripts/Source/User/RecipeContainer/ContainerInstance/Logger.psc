@@ -1,4 +1,4 @@
-Scriptname RecipeContainer:Logger:ContainerInstance Hidden Const DebugOnly
+Scriptname RecipeContainer:ContainerInstance:Logger Hidden Const DebugOnly
 
 String[] Function getTags() Global
 	String[] tags = new String[1]

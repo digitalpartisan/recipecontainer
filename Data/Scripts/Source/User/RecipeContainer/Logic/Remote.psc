@@ -9,17 +9,17 @@ RecipeContainer:Logic:Local remoteContainerType = None
 
 RecipeContainer:Logic:Local Function lookupRemoteContainerType()
 	if (!TargetPlugin || !TargetDigits)
-		RecipeContainer:Logger:Logic.remoteNotLoaded(self)
+		RecipeContainer:Logic:Logger.remoteNotLoaded(self)
 		return None
 	endif
 	
-	RecipeContainer:Logic:Local remoteLogic = TargetPlugin.lookupWithDigits(TargetDigits) as RecipeContainer:Logic:Local
+	RecipeContainer:Logic:Local remoteLogic = TargetPlugin.lookup(TargetDigits) as RecipeContainer:Logic:Local
 	if (remoteLogic)
-		RecipeContainer:Logger:Logic.remoteLoaded(self, remoteLogic)
+		RecipeContainer:Logic:Logger.remoteLoaded(self, remoteLogic)
 		return remoteLogic
 	endif
 	
-	RecipeContainer:Logger:Logic.remoteNotLoaded(self)
+	RecipeContainer:Logic:Logger.remoteNotLoaded(self)
 	return None
 EndFunction
 
@@ -33,7 +33,7 @@ EndFunction
 
 RecipeContainer:Logic:Local Function getRemoteContainerType()
 	!remoteContainerType && refresh() ; could change the vaule of remoteContainerType
-	!remoteContainerType && RecipeContainer:Logger:Logic.logRemoteNotFound(self)
+	!remoteContainerType && RecipeContainer:Logic:Logger.logRemoteNotFound(self)
 	
 	return remoteContainerType
 EndFunction

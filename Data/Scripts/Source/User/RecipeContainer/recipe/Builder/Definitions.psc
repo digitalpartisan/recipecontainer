@@ -23,7 +23,7 @@ Var[] Function populateBehavior()
 	RecipeContainer:Recipe[] definitionList = getDefinitions()
 
 	if (!definitionList || !definitionList.Length)
-		RecipeContainer:Logger:Builder.noRecipes(self)
+		RecipeContainer:Recipe:Builder:Logger.noRecipes(self)
 		return None
 	endif
 	
@@ -36,13 +36,13 @@ Var[] Function populateBehavior()
 	while (iCounter < definitionList.Length)
 		recipe = definitionList[iCounter]
 		if (!recipe)
-			RecipeContainer:Logger:Builder.invalidRecipe(self, iCounter, recipe)
+			RecipeContainer:Recipe:Builder:Logger.invalidRecipe(self, iCounter, recipe)
 			return None
 		endif
 		
 		newRecipe = recipe.get()
 		if (!newRecipe)
-			RecipeContainer:Logger:Builder.invalidSimpleRecipe(self, iCounter, newRecipe)
+			RecipeContainer:Recipe:Builder:Logger.invalidSimpleRecipe(self, iCounter, newRecipe)
 			return None
 		endif
 		
