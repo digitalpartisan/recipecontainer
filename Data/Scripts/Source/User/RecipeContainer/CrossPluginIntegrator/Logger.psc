@@ -1,8 +1,8 @@
 Scriptname RecipeContainer:CrossPluginIntegrator:Logger Hidden Const DebugOnly
 
 String[] Function getTags() Global
-	String[] tags = new String[1]
-	tags[0] = "Cross Plugin Integrator"
+	String[] tags = new String[0]
+	tags.Add("Cross Plugin Integrator")
 	return tags
 EndFunction
 

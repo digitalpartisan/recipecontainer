@@ -1,8 +1,8 @@
 Scriptname RecipeContainer:Logic:Logger Hidden Const DebugOnly
 
 String[] Function getTags() Global
-	String[] tags = new String[1]
-	tags[0] = "Container Type Logic"
+	String[] tags = new String[0]
+	tags.Add("Container Type Logic")
 	return tags
 EndFunction
 

@@ -1,8 +1,8 @@
 Scriptname RecipeContainer:Recipe:Builder:Logger Hidden Const DebugOnly
 
 String[] Function getTags() Global
-	String[] tags = new String[1]
-	tags[0] = "Recipe Builder"
+	String[] tags = new String[0]
+	tags.Add("Recipe Builder")
 	return tags
 EndFunction
 
