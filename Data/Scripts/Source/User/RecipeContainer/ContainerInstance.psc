@@ -14,6 +14,14 @@ Int Property ProcessingTimerID = 1 Auto Const
 String sStateWaiting = "Waiting" Const
 String sStateProcessing = "Processing" Const
 
+WorkshopScript Function getWorkshopReference()
+	return getLinkedRef(Game.GetFormFromFile(0x00054BA6, "Fallout4.esm") as Keyword) as WorkshopScript
+EndFunction
+
+Bool Function isWorkshopObject()
+	return getWorkshopReference() as Bool
+EndFunction
+
 Bool Function isWaiting()
 	return false
 EndFunction
@@ -27,7 +35,7 @@ Bool Function requiresPower()
 EndFunction
 
 Bool Function meetsPowerRequirements()
-	return !requiresPower() || IsPowered()
+	return !isWorkshopObject() || !requiresPower() || IsPowered()
 EndFunction
 
 Bool Function isProcessing()
