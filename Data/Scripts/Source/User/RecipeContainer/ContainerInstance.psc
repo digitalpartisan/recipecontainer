@@ -15,7 +15,7 @@ String sStateWaiting = "Waiting" Const
 String sStateProcessing = "Processing" Const
 
 WorkshopScript Function getWorkshopReference()
-	return getLinkedRef(Game.GetFormFromFile(0x00054BA6, "Fallout4.esm") as Keyword) as WorkshopScript
+	return SimpleSettlementSolutions:Reference.getWorkshopReference(self)
 EndFunction
 
 Bool Function isWorkshopObject()
@@ -31,7 +31,7 @@ Function goToWaiting()
 EndFunction
 
 Bool Function requiresPower()
-	return GetValue(Game.GetFormFromFile(0x00000330, "Fallout4.esm") as ActorValue) > 0
+	return GetValue(SimpleSettlementSolutions:Utility:ActorValue.getPowerRequired()) > 0
 EndFunction
 
 Bool Function meetsPowerRequirements()
